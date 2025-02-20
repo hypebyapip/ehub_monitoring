@@ -1,0 +1,383 @@
+{% extends 'base.html' %} {% block title %}Load Monitoring{% endblock %} {%
+block content %}
+<div class="space-y-6">
+  <!-- Total System Stats Card -->
+  <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-4">
+    <div
+      class="bg-gray-100 dark:bg-dark-hover rounded-t-lg border-b border-light-border dark:border-dark-border p-1"
+    >
+      <div class="flex items-center gap-2 p-2 justify-center">
+        <h2
+          class="font-medium text-light-text-primary dark:text-dark-text-primary"
+        >
+          <i class="fa-solid fa-chart-line mr-2"></i>Tenant Overview
+        </h2>
+      </div>
+    </div>
+
+    <div
+      class="grid grid-cols-1 md:grid-cols-4 border border-light-border dark:border-dark-border gap-4 text-center p-4"
+    >
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">
+          ACTIVE TENANT
+        </p>
+        <p
+          id=""
+          class="text-lg text-light-text-primary dark:text-dark-text-primary"
+        >
+          N/A
+        </p>
+      </div>
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">
+          VOLTAGE TOTAL
+        </p>
+        <p
+          id=""
+          class="text-lg text-light-text-primary dark:text-dark-text-primary"
+        >
+          N/A
+        </p>
+      </div>
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">
+          CURRENT TOTAL
+        </p>
+        <p
+          id=""
+          class="text-lg text-light-text-primary dark:text-dark-text-primary"
+        >
+          N/A
+        </p>
+      </div>
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">
+          POWER TOTAL
+        </p>
+        <p
+          id=""
+          class="text-lg text-light-text-primary dark:text-dark-text-primary"
+        >
+          N/A
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Tenant 1 Card -->
+  <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-4">
+    <div
+      class="bg-gray-100 dark:bg-dark-hover rounded-t-lg border-b border-light-border dark:border-dark-border p-1"
+    >
+      <div class="flex items-center gap-2 p-2 justify-center">
+        <h2
+          class="font-medium text-light-text-primary dark:text-dark-text-primary"
+        >
+          <i class="fa-solid fa-plug mr-2"></i>Tenant 1
+        </h2>
+      </div>
+    </div>
+
+    <div
+      class="grid grid-cols-1 md:grid-cols-4 border border-light-border dark:border-dark-border gap-4 text-center p-4"
+    >
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">
+          DCPDB
+        </p>
+        <p
+          id="dcpdb-tenant1"
+          class="text-lg text-light-text-primary dark:text-dark-text-primary"
+        >
+          N/A
+        </p>
+      </div>
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">
+          VOLTAGE
+        </p>
+        <p
+          id="voltage-tenant1"
+          class="text-lg text-light-text-primary dark:text-dark-text-primary"
+        >
+          N/A
+        </p>
+      </div>
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">
+          CURRENT
+        </p>
+        <p
+          id="current-tenant1"
+          class="text-lg text-light-text-primary dark:text-dark-text-primary"
+        >
+          N/A
+        </p>
+      </div>
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">
+          POWER
+        </p>
+        <p
+          id="power-tenant1"
+          class="text-lg text-light-text-primary dark:text-dark-text-primary"
+        >
+          N/A
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tenant 2 Card -->
+  <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-4">
+    <div
+      class="bg-gray-100 dark:bg-dark-hover rounded-t-lg border-b border-light-border dark:border-dark-border p-1"
+    >
+      <div class="flex items-center gap-2 p-2 justify-center">
+        <h2
+          class="font-medium text-light-text-primary dark:text-dark-text-primary"
+        >
+          <i class="fa-solid fa-plug mr-2"></i>Tenant 2
+        </h2>
+      </div>
+    </div>
+
+    <div
+      class="grid grid-cols-1 md:grid-cols-4 border border-light-border dark:border-dark-border gap-4 text-center p-4"
+    >
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">
+          DCPDB
+        </p>
+        <p
+          id="dcpdb-tenant2"
+          class="text-lg text-light-text-primary dark:text-dark-text-primary"
+        >
+          N/A
+        </p>
+      </div>
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">
+          VOLTAGE
+        </p>
+        <p
+          id="voltage-tenant2"
+          class="text-lg text-light-text-primary dark:text-dark-text-primary"
+        >
+          N/A
+        </p>
+      </div>
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">
+          CURRENT
+        </p>
+        <p
+          id="current-tenant2"
+          class="text-lg text-light-text-primary dark:text-dark-text-primary"
+        >
+          N/A
+        </p>
+      </div>
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">
+          POWER
+        </p>
+        <p
+          id="power-tenant2"
+          class="text-lg text-light-text-primary dark:text-dark-text-primary"
+        >
+          N/A
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tenant 3 Card -->
+  <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-4">
+    <div
+      class="bg-gray-100 dark:bg-dark-hover rounded-t-lg border-b border-light-border dark:border-dark-border p-1"
+    >
+      <div class="flex items-center gap-2 p-2 justify-center">
+        <h2
+          class="font-medium text-light-text-primary dark:text-dark-text-primary"
+        >
+          <i class="fa-solid fa-plug mr-2"></i>Tenant 3
+        </h2>
+      </div>
+    </div>
+
+    <div
+      class="grid grid-cols-1 md:grid-cols-4 border border-light-border dark:border-dark-border gap-4 text-center p-4"
+    >
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">
+          DCPDB
+        </p>
+        <p
+          id="dcpdb-tenant3"
+          class="text-lg text-light-text-primary dark:text-dark-text-primary"
+        >
+          N/A
+        </p>
+      </div>
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">
+          VOLTAGE
+        </p>
+        <p
+          id="voltage-tenant3"
+          class="text-lg text-light-text-primary dark:text-dark-text-primary"
+        >
+          N/A
+        </p>
+      </div>
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">
+          CURRENT
+        </p>
+        <p
+          id="current-tenant3"
+          class="text-lg text-light-text-primary dark:text-dark-text-primary"
+        >
+          N/A
+        </p>
+      </div>
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">
+          POWER
+        </p>
+        <p
+          id="power-tenant3"
+          class="text-lg text-light-text-primary dark:text-dark-text-primary"
+        >
+          N/A
+        </p>
+      </div>
+    </div>
+  </div>
+
+  
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.min.js"></script>
+<script>
+  const socket = io();
+
+  socket.on("connect", () => {
+    console.log("Connected to Socket.IO");
+  });
+
+  function getValueWithUnit(data, key, unit) {
+    const value = data[key];
+    return value && !isNaN(parseFloat(value))
+      ? parseFloat(value).toFixed(2) + " " + unit
+      : "N/A";
+  }
+
+  function updateDCPDBStatus(element, status, tenantNumber) {
+    const voltageElement = document.getElementById(`voltage-tenant${tenantNumber}`);
+    const currentElement = document.getElementById(`current-tenant${tenantNumber}`);
+    const powerElement = document.getElementById(`power-tenant${tenantNumber}`);
+
+    if (status === "1") {
+      element.textContent = "ON";
+      element.className = "text-lg font-medium text-green-500 dark:text-green-400";
+      
+      // Reset warna jika tenant aktif
+      voltageElement.className = "text-lg text-light-text-primary dark:text-dark-text-primary";
+      currentElement.className = "text-lg text-light-text-primary dark:text-dark-text-primary";
+      powerElement.className = "text-lg text-light-text-primary dark:text-dark-text-primary";
+      
+    } else if (status === "0") {
+      element.textContent = "OFF";
+      element.className = "text-lg font-medium text-red-500 dark:text-red-400";
+      
+      // Jika OFF, ubah seluruh data menjadi merah
+      voltageElement.className = "text-lg font-medium text-red-500 dark:text-red-400";
+      currentElement.className = "text-lg font-medium text-red-500 dark:text-red-400";
+      powerElement.className = "text-lg font-medium text-red-500 dark:text-red-400";
+      
+    } else {
+      element.textContent = "N/A";
+      element.className = "text-lg font-medium text-gray-500 dark:text-gray-400";
+      
+      // Jika status tidak diketahui, ubah ke abu-abu
+      voltageElement.className = "text-lg font-medium text-gray-500 dark:text-gray-400";
+      currentElement.className = "text-lg font-medium text-gray-500 dark:text-gray-400";
+      powerElement.className = "text-lg font-medium text-gray-500 dark:text-gray-400";
+    }
+  }
+
+  function updateTenantData(data, tenantNumber) {
+    if (!data) return;
+
+    // Update DCPDB Status
+    const dcpdbElement = document.getElementById(`dcpdb-tenant${tenantNumber}`);
+    const dcpdbStatus = data[`load.data.dcpdb_tenant${tenantNumber}`];
+    updateDCPDBStatus(dcpdbElement, dcpdbStatus, tenantNumber);
+
+    // Update other metrics
+    document.getElementById(`voltage-tenant${tenantNumber}`).textContent =
+      getValueWithUnit(data, `load.data.volt_tenant${tenantNumber}`, "V");
+    document.getElementById(`current-tenant${tenantNumber}`).textContent =
+      getValueWithUnit(data, `load.data.curr_tenant${tenantNumber}`, "A");
+    document.getElementById(`power-tenant${tenantNumber}`).textContent =
+      getValueWithUnit(data, `load.data.power_tenant${tenantNumber}`, "W");
+  }
+
+  function updateTotalStats(data) {
+    if (!data) return;
+
+    // Calculate totals
+    let totalCurrent = 0;
+    let totalPower = 0;
+    let activeTenantCount = 0;
+
+    for (let i = 1; i <= 3; i++) {
+      const dcpdbStatus = data[`load.data.dcpdb_tenant${i}`];
+      if (dcpdbStatus === "1") {
+        activeTenantCount++;
+        const current = parseFloat(data[`load.data.curr_tenant${i}`]) || 0;
+        const power = parseFloat(data[`load.data.power_tenant${i}`]) || 0;
+        totalCurrent += current;
+        totalPower += power;
+      }
+    }
+
+    // Update display with proper error handling
+    const totalCurrentElement = document.getElementById("total-current");
+    const totalPowerElement = document.getElementById("total-power");
+    const activeTenantsElement = document.getElementById("active-tenants");
+
+    if (activeTenantCount > 0) {
+      totalCurrentElement.textContent = totalCurrent.toFixed(2) + " A";
+      totalPowerElement.textContent = totalPower.toFixed(2) + " W";
+    } else {
+      totalCurrentElement.textContent = "N/A";
+      totalPowerElement.textContent = "N/A";
+    }
+    activeTenantsElement.textContent = `${activeTenantCount} / 3`;
+  }
+
+  socket.on("mqtt_data", (data) => {
+    if (!data) {
+      console.warn("Received empty data from MQTT");
+      return;
+    }
+
+    try {
+      // Update all tenant displays
+      for (let i = 1; i <= 3; i++) {
+        updateTenantData(data, i);
+      }
+
+      // Update total system statistics
+      updateTotalStats(data);
+    } catch (error) {
+      console.error("Error updating display:", error);
+    }
+  });
+</script>
+
+{% endblock %}

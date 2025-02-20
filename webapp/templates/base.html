@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}My Application{% endblock %}</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              light: {
+                primary: "#f4f4f4",
+                secondary: "#ffffff",
+                "text-primary": "#333333",
+                "text-secondary": "#666666",
+                border: "#eaeaea",
+                hover: "#ddd",
+                navbar: "#C42B2B",
+              },
+              dark: {
+                primary: "#1a1a1a",
+                secondary: "#2d2d2d",
+                "text-primary": "#ffffff",
+                "text-secondary": "#b3b3b3",
+                border: "#404040",
+                hover: "#404040",
+                navbar: "#C42B2B",
+              },
+            },
+            fontFamily: {
+              sans: ["Montserrat", "sans-serif"],
+            },
+          },
+        },
+      };
+    </script>
+    {% block head %}{% endblock %}
+  </head>
+  <body
+    class="min-h-screen overflow-x-hidden bg-light-primary text-light-text-primary dark:bg-dark-primary dark:text-dark-text-primary font-sans transition-colors duration-300"
+  >
+    <!-- Navbar -->
+    <nav
+      class="fixed top-0 left-0 w-full h-[60px] flex justify-between items-center px-4 bg-light-navbar dark:bg-dark-navbar border-b border-light-border dark:border-dark-border z-50"
+    >
+      <div class="flex items-center space-x-4">
+        <button
+          class="menu-toggle text-white dark:text-white text-xl bg-transparent"
+        >
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="flex items-center gap-2">
+          <img
+            src="/static/images/logo.png"
+            alt="Sundaya Logo"
+            class="h-7 w-auto"
+          />
+        </div>
+      </div>
+      <div class="flex items-center space-x-4">
+        <button
+          class="mode-toggle text-white dark:text-white text-lg w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10"
+        >
+          <i class="fas fa-moon"></i>
+        </button>
+        <button
+          class="profile-btn bg-orange-500 text-white text-lg w-8 h-8 rounded-full flex items-center justify-center hover:bg-orange-600"
+        >
+          <i class="fas fa-user"></i>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="flex min-h-[calc(100vh-60px)] mt-[60px]">
+      <!-- Sidebar -->
+      <div
+        class="sidebar fixed top-[60px] left-0 w-[250px] h-[calc(100vh-60px)] bg-light-secondary dark:bg-dark-secondary overflow-y-auto transition-all duration-300"
+      >
+        <div
+          class="border-b border-light-border dark:border-dark-border p-4 text-light-text-primary dark:text-dark-text-primary"
+        >
+          <div id="date" class="text-gray-600 dark:text-gray-400"></div>
+          <div id="time" class="text-2xl font-bold mt-1"></div>
+        </div>
+        <ul class="py-4">
+          <li>
+            <a
+              href="/"
+              class="block px-6 py-3 text-light-text-primary dark:text-dark-text-primary hover:bg-light-hover dark:hover:bg-dark-hover transition-all duration-300"
+            >
+              <i class="fas fa-home mr-2"></i> Dashboard
+            </a>
+          </li>
+          
+          <!-- Monitoring dropdown -->
+          <li class="dropdown relative">
+            <a
+              href="javascript:void(0);"
+              class="block px-6 py-3 text-light-text-primary dark:text-dark-text-primary hover:bg-light-hover dark:hover:bg-dark-hover transition-all duration-300 flex justify-between items-center"
+            >
+              <span><i class="fa-solid fa-gauge-high mr-2"></i> Monitoring</span>
+              <i class="fas fa-chevron-down transform transition-transform duration-300"></i>
+            </a>
+            <ul class="submenu hidden bg-light-secondary dark:bg-dark-secondary">
+              <li>
+                <a 
+                href="/monitoring/scc"
+                class="block px-10 py-3 text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-hover dark:hover:bg-dark-hover transition-all duration-300"
+                 >
+                  <i class="fa-solid fa-bolt mr-3"></i> Solar Charger Controller
+                </a>
+              </li>
+              <li>
+                <a 
+                href="/monitoring/battery"
+                class="block px-10 py-3 text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-hover dark:hover:bg-dark-hover transition-all duration-300"
+                >
+                  <i class="fa-solid fa-battery-full mr-2"></i> Battery Monitoring
+                </a>
+              </li>
+              <li>
+                <a 
+                href="/monitoring/load"
+                class="block px-10 py-3 text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-hover dark:hover:bg-dark-hover transition-all duration-300"
+                >
+                  <i class="fa-solid fa-plug mr-4"></i> Tenant Overview
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- History dropdown -->
+          <li class="dropdown relative">
+            <a
+              href="javascript:void(0);"
+              class="block px-6 py-3 text-light-text-primary dark:text-dark-text-primary hover:bg-light-hover dark:hover:bg-dark-hover transition-all duration-300 flex justify-between items-center"
+            >
+              <span><i class="fa-solid fa-clock-rotate-left mr-2"></i> History</span>
+              <i class="fas fa-chevron-down transform transition-transform duration-300"></i>
+            </a>
+            <ul class="submenu hidden bg-light-secondary dark:bg-dark-secondary">
+              <li>
+                <a
+                  href="#"
+                  class="block px-10 py-3 text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-hover dark:hover:bg-dark-hover transition-all duration-300"
+                >
+                  <i class="fa-solid fa-chart-line mr-2"></i> Data Log
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="block px-10 py-3 text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-hover dark:hover:bg-dark-hover transition-all duration-300"
+                >
+                  <i class="fa-solid fa-database mr-2"></i> Graphic
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Settings with nested dropdown -->
+          <li class="dropdown relative">
+            <a
+              href="javascript:void(0);"
+              class="block px-6 py-3 text-light-text-primary dark:text-dark-text-primary hover:bg-light-hover dark:hover:bg-dark-hover transition-all duration-300 flex justify-between items-center"
+            >
+              <span><i class="fa-solid fa-gear mr-2"></i> Settings</span>
+              <i class="fas fa-chevron-down transform transition-transform duration-300"></i>
+            </a>
+            <ul class="submenu hidden bg-light-secondary dark:bg-dark-secondary">
+              <li class="nested-dropdown">
+                <a
+                  href="javascript:void(0);"
+                  class="block px-10 py-3 text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-hover dark:hover:bg-dark-hover transition-all duration-300 flex justify-between items-center"
+                >
+                  <span><i class="fa-solid fa-microchip mr-2"></i> Device Config</span>
+                  <i class="fas fa-chevron-right transform transition-transform duration-300"></i>
+                </a>
+                <ul class="nested-submenu hidden pl-6 bg-light-secondary dark:bg-dark-secondary">
+                  <li>
+                    <a
+                      href="/pms/settings"
+                      class="block px-10 py-2 text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-hover dark:hover:bg-dark-hover transition-all duration-300"
+                    >
+                      <i class="fa-solid fa-gear mr-2"></i> PMS
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="/scc/settings"
+                      class="block px-10 py-2 text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-hover dark:hover:bg-dark-hover transition-all duration-300"
+                    >
+                      <i class="fa-solid fa-solar-panel mr-2"></i> SCC
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="/bms/settings"
+                      class="block px-10 py-2 text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-hover dark:hover:bg-dark-hover transition-all duration-300"
+                    >
+                      <i class="fa-solid fa-car-battery mr-2"></i> BMS
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="/tenant/settings"
+                      class="block px-10 py-2 text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-hover dark:hover:bg-dark-hover transition-all duration-300"
+                    >
+                      <i class="fa-solid fa-users mr-2"></i> Power Config
+                    </a>
+                  </li>
+                </ul>
+              </li>
+          
+              <li class="nested-dropdown">
+                <a
+                  href="javascript:void(0);"
+                  class="block px-10 py-3 text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-hover dark:hover:bg-dark-hover transition-all duration-300 flex justify-between items-center"
+                >
+                  <span><i class="fa-solid fa-sliders mr-2"></i> Asset Config</span>
+                  <i class="fas fa-chevron-right transform transition-transform duration-300"></i>
+                </a>
+                <ul class="nested-submenu hidden pl-6 bg-light-secondary dark:bg-dark-secondary">
+                  <li>
+                    <a
+                      href="/user/config"
+                      class="block px-10 py-2 text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-hover dark:hover:bg-dark-hover transition-all duration-300"
+                    >
+                      <i class="fa-solid fa-user-cog mr-2"></i> User Config
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="/site/config"
+                      class="block px-10 py-2 text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-hover dark:hover:bg-dark-hover transition-all duration-300"
+                    >
+                      <i class="fa-solid fa-map-marked-alt mr-2"></i> Site Config
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Content Area -->
+      <div class="content ml-[250px] p-5 flex-grow bg-light-primary dark:bg-dark-primary transition-all duration-300">
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const menuToggle = document.querySelector(".menu-toggle");
+        const sidebar = document.querySelector(".sidebar");
+        const content = document.querySelector(".content");
+        const modeToggle = document.querySelector(".mode-toggle");
+        const html = document.documentElement;
+
+        // Check for saved dark mode preference
+        if (localStorage.getItem("darkMode") === "true") {
+          html.classList.add("dark");
+          modeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        // Menu toggle functionality
+        menuToggle.addEventListener("click", () => {
+          sidebar.classList.toggle("w-0");
+          sidebar.classList.toggle("overflow-hidden");
+          content.classList.toggle("ml-0");
+
+          if (window.innerWidth <= 768) {
+            sidebar.classList.toggle("-translate-x-full");
+          }
+        });
+
+        // Dark mode toggle
+        modeToggle.addEventListener("click", () => {
+          html.classList.toggle("dark");
+          const isDarkMode = html.classList.contains("dark");
+          localStorage.setItem("darkMode", isDarkMode);
+          modeToggle.innerHTML = isDarkMode
+            ? '<i class="fas fa-sun"></i>'
+            : '<i class="fas fa-moon"></i>';
+        });
+
+        // Main dropdown functionality
+        const dropdowns = document.querySelectorAll(".dropdown");
+        dropdowns.forEach((dropdown) => {
+          const dropdownLink = dropdown.querySelector("a");
+          dropdownLink.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // Close other main dropdowns
+            dropdowns.forEach((otherDropdown) => {
+              if (otherDropdown !== dropdown) {
+                const otherSubmenu = otherDropdown.querySelector(".submenu");
+                const otherChevron = otherDropdown.querySelector("a .fa-chevron-down");
+                if (otherSubmenu) {
+                  otherSubmenu.classList.remove("block");
+                  otherSubmenu.classList.add("hidden");
+                }
+                if (otherChevron) {
+                  otherChevron.classList.remove("rotate-180");
+                }
+
+                // Close nested dropdowns in other main dropdowns
+                const nestedDropdowns = otherDropdown.querySelectorAll(".nested-dropdown");
+                nestedDropdowns.forEach((nestedDropdown) => {
+                  const nestedSubmenu = nestedDropdown.querySelector(".nested-submenu");
+                  const nestedChevron = nestedDropdown.querySelector("a .fa-chevron-right");
+                  if (nestedSubmenu) {
+                    nestedSubmenu.classList.remove("block");
+                    nestedSubmenu.classList.add("hidden");
+                  }
+                  if (nestedChevron) {
+                    nestedChevron.classList.remove("rotate-90");
+                  }
+                });
+              }
+            });
+
+            const submenu = dropdown.querySelector(".submenu");
+            const chevron = dropdownLink.querySelector(".fa-chevron-down");
+            
+            submenu.classList.toggle("hidden");
+            submenu.classList.toggle("block");
+            chevron.classList.toggle("rotate-180");
+          });
+        });
+
+        // Nested dropdown functionality
+        const nestedDropdowns = document.querySelectorAll(".nested-dropdown");
+        nestedDropdowns.forEach((nestedDropdown) => {
+          const nestedDropdownLink = nestedDropdown.querySelector("a");
+          nestedDropdownLink.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const nestedSubmenu = nestedDropdown.querySelector(".nested-submenu");
+            const chevronRight = nestedDropdownLink.querySelector(".fa-chevron-right");
+            
+            nestedSubmenu.classList.toggle("hidden");
+            nestedSubmenu.classList.toggle("block");
+            chevronRight.classList.toggle("rotate-90");
+          });
+        });
+
+        // Close all dropdowns when clicking outside
+        document.addEventListener("click", function (e) {
+          if (!e.target.closest(".dropdown")) {
+            dropdowns.forEach((dropdown) => {
+              const submenu = dropdown.querySelector(".submenu");
+              const chevron = dropdown.querySelector("a .fa-chevron-down");
+              if (submenu) {
+                submenu.classList.remove("block");
+                submenu.classList.add("hidden");
+              }
+              if (chevron) {
+                chevron.classList.remove("rotate-180");
+              }
+
+              // Close nested dropdowns as well
+              const nestedDropdowns = dropdown.querySelectorAll(".nested-dropdown");
+              nestedDropdowns.forEach((nestedDropdown) => {
+                const nestedSubmenu = nestedDropdown.querySelector(".nested-submenu");
+                const nestedChevron = nestedDropdown.querySelector("a .fa-chevron-right");
+                if (nestedSubmenu) {
+                  nestedSubmenu.classList.remove("block");
+                  nestedSubmenu.classList.add("hidden");
+                }
+                if (nestedChevron) {
+                  nestedChevron.classList.remove("rotate-90");
+                }
+              });
+            });
+          }
+        });
+
+        // Update time and date
+        function updateDateTime() {
+          const now = new Date();
+          const dateElement = document.getElementById("date");
+          const timeElement = document.getElementById("time");
+          
+          const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+          dateElement.textContent = now.toLocaleDateString('en-US', options);
+          timeElement.textContent = now.toLocaleTimeString('en-US', { 
+            hour: '2-digit', 
+            minute: '2-digit',
+            hour12: true 
+          });
+        }
+
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+      });
+    </script>
+  </body>
+</html>

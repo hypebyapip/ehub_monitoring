@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Measurement Calibration{% endblock %}
+
+{% block content %}
+<div class="p-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Measurement Calibration -->
+        <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-4 relative tenant-card">
+            <h2 class="text-lg font-semibold mb-4">Measurement Calibration</h2>
+            <table class="w-full border-collapse">
+                <thead>
+                    <tr class="bg-gray-200 bg-light-secondary dark:bg-dark-hover rounded-t-lg border-b border-light-border dark:border-dark-border p-1">
+                        <th class="p-2">Parameter</th>
+                        <th class="p-2">Real Parameter</th>
+                        <th class="p-2">Scale Vector</th>
+                        <th class="p-2">Input Scale Vector</th>
+                        <th class="p-2">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="p-2">Bus Voltage</td>
+                        <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                        <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                        <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                        <td class="p-2"><button class="bg-red-500 text-white p-2 rounded">Set</button></td>
+                    </tr>
+                    <tr>
+                        <td class="p-2">Tenant Current</td>
+                        <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                        <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                        <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                        <td class="p-2"><button class="bg-red-500 text-white p-2 rounded">Set</button></td>
+                    </tr>
+                    <tr>
+                        <td class="p-2">MW/VSAT Current</td>
+                        <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                        <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                        <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                        <td class="p-2"><button class="bg-red-500 text-white p-2 rounded">Set</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- Alarm Threshold -->
+        <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-4 relative tenant-card">
+            <h2 class="text-lg font-semibold mb-4">Alarm Threshold</h2>
+            <table class="w-full border-collapse">
+                <thead>
+                    <tr class="bg-gray-200 bg-light-secondary dark:bg-dark-hover rounded-t-lg border-b border-light-border dark:border-dark-border p-1">
+                        <th class="p-2">Alarm Name</th>
+                        <th class="p-2">Low Threshold</th>
+                        <th class="p-2">High Threshold</th>
+                        <th class="p-2">Disconnect Voltage</th>
+                        <th class="p-2">Reconnect Voltage</th>
+                        <th class="p-2">Set</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="p-2">Bus Voltage</td>
+                        <td class="p-2">-</td>
+                        <td class="p-2">-</td>
+                        <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                        <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                        <td class="p-2"><button class="bg-red-500 text-white p-2 rounded">Set</button></td>
+                    </tr>
+                    <tr>
+                        <td class="p-2">Battery Voltage</td>
+                        <td class="p-2">-</td>
+                        <td class="p-2">-</td>
+                        <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                        <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                        <td class="p-2"><button class="bg-red-500 text-white p-2 rounded">Set</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="mb-6">
+
+    </div>
+    <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-4 relative tenant-card">
+        <h2 class="text-lg font-semibold mb-4">LVD Setpoint Setting</h2>
+        <table class="w-full border-collapse ">
+            <thead>
+                <tr class="bg-gray-200 bg-light-secondary dark:bg-dark-hover rounded-t-lg border-b border-light-border dark:border-dark-border p-1">
+                    <th class="p-2">Channel</th>
+                    <th class="p-2">Disconnect Voltage Value</th>
+                    <th class="p-2">Reconnect Voltage Value</th>
+                    <th class="p-2">LVD Status</th>
+                    <th class="p-2">Disconnect Voltage</th>
+                    <th class="p-2">Reconnect Voltage</th>
+                    <th class="p-2">LVD Enable</th>
+                    <th class="p-2">Set</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="p-2">LVD Tenant 1</td>
+                    <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                    <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                    <td class="p-2">Enable</td>
+                    <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                    <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                    <td class="p-2">Enable</td>
+                    <td class="p-2 text-center"><button class="bg-red-500 text-white p-2 rounded">Set</button></td>
+                </tr>
+                <tr>
+                    <td class="p-2">LVD Tenant 2</td>
+                    <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                    <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                    <td class="p-2">Enable</td>
+                    <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                    <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                    <td class="p-2">Enable</td>
+                    <td class="p-2 text-center"><button class="bg-red-500 text-white p-2 rounded">Set</button></td>
+                </tr>
+                <tr>
+                    <td class="p-2">LVD Tenant 3</td>
+                    <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                    <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                    <td class="p-2">Enable</td>
+                    <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                    <td class="p-2"><input type="text" class="w-full p-1 border rounded bg-white bg-light-secondary dark:bg-dark-hover  border-b border-light-border dark:border-dark-border p-1"></td>
+                    <td class="p-2">Enable</td>
+                    <td class="p-2 text-center"><button class="bg-red-500 text-white p-2 rounded">Set</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+        
+</div>
+
+{% endblock %}

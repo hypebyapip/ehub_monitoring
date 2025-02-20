@@ -1,0 +1,386 @@
+{% extends 'base.html' %} {% block title %}Graphic View{% endblock %} {% block
+content %}
+<div class="space-y-6 p-4">
+  <!-- Filter Form Card -->
+  <div class="bg-white dark:bg-dark-secondary rounded-lg shadow-md p-6">
+    <h2
+      class="text-xl font-medium text-light-text-primary dark:text-dark-text-primary mb-4"
+    >
+      Data Filter
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Start Date -->
+      <div>
+        <label
+          class="block text-light-text-secondary dark:text-dark-text-secondary mb-2"
+        >
+          Start Date
+        </label>
+        <input
+          type="date"
+          id="start-date"
+          class="w-full px-4 py-2 rounded-md border border-light-border dark:border-dark-border bg-light-primary dark:bg-dark-primary text-light-text-primary dark:text-dark-text-primary focus:outline-none focus:ring-2 focus:ring-light-navbar dark:focus:ring-dark-navbar"
+        />
+      </div>
+
+      <!-- End Date -->
+      <div>
+        <label
+          class="block text-light-text-secondary dark:text-dark-text-secondary mb-2"
+        >
+          End Date
+        </label>
+        <input
+          type="date"
+          id="end-date"
+          class="w-full px-4 py-2 rounded-md border border-light-border dark:border-dark-border bg-light-primary dark:bg-dark-primary text-light-text-primary dark:text-dark-text-primary focus:outline-none focus:ring-2 focus:ring-light-navbar dark:focus:ring-dark-navbar"
+        />
+      </div>
+
+      <!-- Multi-select Dropdown -->
+      <div class="relative">
+        <label
+          class="block text-light-text-secondary dark:text-dark-text-secondary mb-2"
+        >
+          Select Sensors
+        </label>
+        <div class="relative">
+          <input
+            type="text"
+            id="sensor-select"
+            readonly
+            placeholder="Select sensors"
+            class="w-full px-4 py-2 rounded-md border border-light-border dark:border-dark-border bg-light-primary dark:bg-dark-primary text-light-text-primary dark:text-dark-text-primary focus:outline-none focus:ring-2 focus:ring-light-navbar dark:focus:ring-dark-navbar cursor-pointer"
+          />
+          <div
+            id="dropdown-menu"
+            class="hidden absolute z-50 w-full mt-1 bg-white dark:bg-dark-secondary border border-light-border dark:border-dark-border rounded-md shadow-lg max-h-60 overflow-y-auto"
+          >
+            <div class="p-2" id="sensor-dropdown-content">
+              <!-- Sensor checkboxes will be dynamically added here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Generate Button -->
+    <div class="mt-6">
+      <button
+        type="button"
+        id="generate-btn"
+        class="w-full bg-light-navbar hover:bg-red-700 text-white font-medium py-2.5 px-4 rounded-md transition-colors duration-200"
+      >
+        Generate Chart
+      </button>
+    </div>
+  </div>
+
+  <!-- Chart Card -->
+  <div
+    id="chart-section"
+    class="bg-white dark:bg-dark-secondary rounded-lg shadow-md p-6"
+  >
+    <div class="flex items-center justify-between mb-4">
+      <h2
+        class="text-xl font-medium text-light-text-primary dark:text-dark-text-primary"
+      >
+        Sensor Data Chart
+      </h2>
+      <div id="chart-loading" class="hidden">
+        <div class="flex items-center">
+          <svg
+            class="animate-spin h-5 w-5 mr-2 text-light-navbar"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          <span class="text-light-text-secondary dark:text-dark-text-secondary"
+            >Loading data...</span
+          >
+        </div>
+      </div>
+    </div>
+    <div class="relative h-[500px]">
+      <canvas id="chartCanvas"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Include Chart.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // State variables
+    let selectedSensors = [];
+    let chart = null;
+
+    // DOM Elements
+    const sensorSelect = document.getElementById("sensor-select");
+    const dropdownMenu = document.getElementById("dropdown-menu");
+    const sensorDropdownContent = document.getElementById(
+      "sensor-dropdown-content"
+    );
+    const generateBtn = document.getElementById("generate-btn");
+    const chartLoading = document.getElementById("chart-loading");
+
+    // Load sensor list
+    function loadSensorList() {
+      fetch("/api/sensor-list")
+        .then((response) => {
+          if (!response.ok) throw new Error("Network response was not ok");
+          return response.json();
+        })
+        .then((sensors) => {
+          console.log("Available sensors:", sensors);
+
+          // Clear existing content
+          sensorDropdownContent.innerHTML = `
+          <label class="flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded cursor-pointer">
+            <input type="checkbox" class="mr-2" value="all" /> Select All
+          </label>
+        `;
+
+          // Add checkboxes
+          sensors.forEach((sensor) => {
+            const label = document.createElement("label");
+            label.className =
+              "flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded cursor-pointer";
+
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.className = "mr-2";
+            checkbox.value = sensor;
+
+            const span = document.createElement("span");
+            span.textContent = sensor;
+
+            label.appendChild(checkbox);
+            label.appendChild(span);
+            sensorDropdownContent.appendChild(label);
+          });
+
+          // Add event listeners
+          const checkboxes = sensorDropdownContent.querySelectorAll(
+            'input[type="checkbox"]'
+          );
+          checkboxes.forEach((checkbox) => {
+            checkbox.addEventListener("change", handleSensorCheckboxChange);
+          });
+        })
+        .catch((error) => {
+          console.error("Error loading sensors:", error);
+          alert("Failed to load sensor list");
+        });
+    }
+
+    // Handle checkbox changes
+    function handleSensorCheckboxChange(e) {
+      const allCheckbox =
+        sensorDropdownContent.querySelector('input[value="all"]');
+      const checkboxes = sensorDropdownContent.querySelectorAll(
+        'input[type="checkbox"]:not([value="all"])'
+      );
+
+      if (e.target.value === "all") {
+        checkboxes.forEach((cb) => {
+          cb.checked = e.target.checked;
+        });
+      } else {
+        allCheckbox.checked = Array.from(checkboxes).every((cb) => cb.checked);
+      }
+
+      selectedSensors = Array.from(checkboxes)
+        .filter((cb) => cb.checked)
+        .map((cb) => cb.value);
+
+      sensorSelect.value =
+        selectedSensors.length > 0
+          ? selectedSensors.join(", ")
+          : "Select sensors";
+    }
+
+    // Initialize chart
+    function initializeChart() {
+      const ctx = document.getElementById("chartCanvas").getContext("2d");
+
+      if (chart) {
+        chart.destroy();
+      }
+
+      chart = new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: [],
+          datasets: [],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            intersect: false,
+            mode: "index",
+          },
+          plugins: {
+            legend: {
+              position: "bottom",
+              labels: {
+                usePointStyle: true,
+                padding: 20,
+              },
+            },
+            tooltip: {
+              mode: "index",
+              intersect: false,
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: "rgba(200, 200, 200, 0.2)",
+              },
+            },
+            x: {
+              grid: {
+                display: false,
+              },
+              ticks: {
+                maxRotation: 45,
+                minRotation: 45,
+              },
+            },
+          },
+        },
+      });
+
+      return chart;
+    }
+
+    // Fetch and update chart data
+    function updateChartData() {
+      const startDate = document.getElementById("start-date").value;
+      const endDate = document.getElementById("end-date").value;
+
+      if (!startDate || !endDate || selectedSensors.length === 0) {
+        alert("Please fill in all fields and select at least one sensor");
+        return;
+      }
+
+      chartLoading.classList.remove("hidden");
+
+      fetch("/api/graph-data", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          start_date: startDate,
+          end_date: endDate,
+          selected_sensors: selectedSensors,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            return response.json().then((err) => {
+              throw new Error(err.message || "Failed to fetch data");
+            });
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Received data:", data);
+
+          const colors = [
+            "#FF6384",
+            "#36A2EB",
+            "#FFCE56",
+            "#4BC0C0",
+            "#9966FF",
+            "#FF9F40",
+            "#FF6384",
+            "#36A2EB",
+            "#FFCE56",
+            "#4BC0C0",
+          ];
+
+          chart.data.labels = data.timepoints;
+          chart.data.datasets = Object.entries(data.sensor_data).map(
+            ([sensor, values], index) => ({
+              label: sensor,
+              data: values,
+              borderColor: colors[index % colors.length],
+              backgroundColor: colors[index % colors.length] + "20",
+              tension: 0.4,
+              fill: true,
+              pointRadius: 2,
+            })
+          );
+
+          chart.update();
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert(error.message);
+        })
+        .finally(() => {
+          chartLoading.classList.add("hidden");
+        });
+    }
+
+    // Event Listeners
+    sensorSelect.addEventListener("click", () => {
+      dropdownMenu.classList.toggle("hidden");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (
+        !sensorSelect.contains(e.target) &&
+        !dropdownMenu.contains(e.target)
+      ) {
+        dropdownMenu.classList.add("hidden");
+      }
+    });
+
+    generateBtn.addEventListener("click", updateChartData);
+
+    // Set default dates
+    function setDefaultDates() {
+      const today = new Date();
+      const lastWeek = new Date(today);
+      lastWeek.setDate(lastWeek.getDate() - 7);
+
+      document.getElementById("start-date").value =
+        formatDateForInput(lastWeek);
+      document.getElementById("end-date").value = formatDateForInput(today);
+    }
+
+    function formatDateForInput(date) {
+      // Gunakan metode yang mempertahankan zona waktu lokal
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    // Initialize
+    setDefaultDates();
+    loadSensorList();
+    initializeChart();
+  });
+</script>
+{% endblock %}

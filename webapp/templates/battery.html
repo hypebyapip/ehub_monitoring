@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+{% block title %}Battery Status{% endblock %}
+
+{% block head %}
+<style>
+  .value-updated {
+    animation: highlight 1s ease-out;
+  }
+  
+  @keyframes highlight {
+    0% {
+      background-color: rgba(255, 255, 0, 0.5);
+    }
+    100% {
+      background-color: transparent;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+  <!-- Status BMS Card -->
+  <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
+    <h2 class="text-center bg-gray-100 dark:bg-dark-hover rounded-lg p-3 gap-2 font-medium mb-4 text-light-text-primary dark:text-dark-text-primary">
+      Status Pack
+    </h2>
+    <div id="bms-status" class="flex justify-center gap-2 flex-wrap"></div>
+  </div>
+
+  <!-- Status Cell Card -->
+  <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-4">
+    <div class="bg-gray-100 dark:bg-dark-hover rounded-t-lg border-b border-light-border dark:border-dark-border p-1">
+      <div class="flex items-center gap-2 p-2 justify-center">
+        <h2 class="font-medium text-light-text-primary dark:text-dark-text-primary">
+          <i class="fa-solid fa-battery-empty mr-2"></i>Status Cell
+        </h2>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-4 border border-light-border dark:border-dark-border gap-4 text-center p-4">
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">Cell Max</p>
+        <p id="cell-max" class="text-lg text-light-text-primary dark:text-dark-text-primary">N/A</p>
+      </div>
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">Cell Min</p>
+        <p id="cell-min" class="text-lg text-light-text-primary dark:text-dark-text-primary">N/A</p>
+      </div>
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">Difference</p>
+        <p id="difference" class="text-lg text-light-text-primary dark:text-dark-text-primary">N/A</p>
+      </div>
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">Battery Status</p>
+        <p id="battery-status" class="text-lg text-gray-500 dark:text-gray-400">N/A</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Battery Metrics -->
+  <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+    <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-4">
+      <h3 class="text-light-text-secondary dark:text-dark-text-secondary mb-2">Voltage</h3>
+      <p id="voltage" class="text-2xl font-medium text-light-text-primary dark:text-dark-text-primary">N/A</p>
+    </div>
+    <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-4">
+      <h3 class="text-light-text-secondary dark:text-dark-text-secondary mb-2">Current</h3>
+      <p id="current" class="text-2xl font-medium text-light-text-primary dark:text-dark-text-primary">N/A</p>
+    </div>
+    <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-4">
+      <h3 class="text-light-text-secondary dark:text-dark-text-secondary mb-2">State of Charge</h3>
+      <p id="soc" class="text-2xl font-medium text-light-text-primary dark:text-dark-text-primary">N/A</p>
+    </div>
+    <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-4">
+      <h3 class="text-light-text-secondary dark:text-dark-text-secondary mb-2">State of Health</h3>
+      <p id="soh" class="text-2xl font-medium text-light-text-primary dark:text-dark-text-primary">N/A</p>
+    </div>
+    <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-4">
+      <h3 class="text-light-text-secondary dark:text-dark-text-secondary mb-2">Temperature</h3>
+      <p id="temperature" class="text-2xl font-medium text-light-text-primary dark:text-dark-text-primary">N/A</p>
+    </div>
+  </div>
+
+  <!-- Cell Voltages and BMS -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Cell Voltages Graph -->
+    <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
+      <h3 class="font-medium mb-4 text-center text-light-text-primary dark:text-dark-text-primary">Cell Voltages</h3>
+      <div class="relative h-96">
+        <!-- Y-axis grid lines -->
+        <div class="absolute inset-0 flex flex-col justify-between pointer-events-none pl-16 pr-2 pb-8">
+          <div class="border-b border-light-border dark:border-dark-border w-full"></div>
+          <div class="border-b border-light-border dark:border-dark-border w-full"></div>
+          <div class="border-b border-light-border dark:border-dark-border w-full"></div>
+          <div class="border-b border-light-border dark:border-dark-border w-full"></div>
+          <div class="border-b border-light-border dark:border-dark-border w-full"></div>
+          <div class="border-b border-light-border dark:border-dark-border w-full"></div>
+        </div>
+
+        <!-- Cell graph container -->
+        <div id="cell-graph" class="flex justify-between h-full pl-16 pr-2 pb-8"></div>
+
+        <!-- Y-axis labels -->
+        <div class="absolute left-0 top-0 bottom-2 w-14 flex flex-col justify-between text-xs text-light-text-secondary dark:text-dark-text-secondary">
+          <span>3500 mV</span>
+          <span>3300 mV</span>
+          <span>3100 mV</span>
+          <span>2900 mV</span>
+          <span>2700 mV</span>
+          <span>2500 mV</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BMS Panel -->
+    <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
+      <h3 id="bms-title" class="flex items-center justify-center gap-2 font-medium mb-8 text-light-text-primary dark:text-dark-text-primary">
+        <i class="fa-solid fa-battery-full mr-2"></i>BMS 1
+      </h3>
+      <div class="grid grid-cols-1 gap-4">
+        <div class="bg-light-secondary dark:bg-dark-hover rounded-lg mb-4">
+          <div class="grid grid-cols-7 text-center p-4 border-b border-light-border dark:border-dark-border">
+            <div class="text-light-text-secondary dark:text-dark-text-secondary">Cell1</div>
+            <div class="text-light-text-secondary dark:text-dark-text-secondary">Cell2</div>
+            <div class="text-light-text-secondary dark:text-dark-text-secondary">Cell3</div>
+            <div class="text-light-text-secondary dark:text-dark-text-secondary">Cell4</div>
+            <div class="text-light-text-secondary dark:text-dark-text-secondary">Cell5</div>
+            <div class="text-light-text-secondary dark:text-dark-text-secondary">Cell6</div>
+            <div class="text-light-text-secondary dark:text-dark-text-secondary">Cell7</div>
+          </div>
+          <div class="grid grid-cols-7 text-center p-4 text-light-text-primary dark:text-dark-text-primary bg-white dark:bg-dark-secondary">
+            <div id="cell1">N/A</div>
+            <div id="cell2">N/A</div>
+            <div id="cell3">N/A</div>
+            <div id="cell4">N/A</div>
+            <div id="cell5">N/A</div>
+            <div id="cell6">N/A</div>
+            <div id="cell7">N/A</div>
+          </div>
+        </div>
+        <div class="bg-light-secondary dark:bg-dark-hover rounded-lg">
+          <div class="grid grid-cols-7 text-center p-4 border-b border-light-border dark:border-dark-border">
+            <div class="text-light-text-secondary dark:text-dark-text-secondary">Cell8</div>
+            <div class="text-light-text-secondary dark:text-dark-text-secondary">Cell9</div>
+            <div class="text-light-text-secondary dark:text-dark-text-secondary">Cell10</div>
+            <div class="text-light-text-secondary dark:text-dark-text-secondary">Cell11</div>
+            <div class="text-light-text-secondary dark:text-dark-text-secondary">Cell12</div>
+            <div class="text-light-text-secondary dark:text-dark-text-secondary">Cell13</div>
+            <div class="text-light-text-secondary dark:text-dark-text-secondary">Cell14</div>
+          </div>
+          <div class="grid grid-cols-7 text-center p-4 text-light-text-primary dark:text-dark-text-primary bg-white dark:bg-dark-secondary">
+            <div id="cell8">N/A</div>
+            <div id="cell9">N/A</div>
+            <div id="cell10">N/A</div>
+            <div id="cell11">N/A</div>
+            <div id="cell12">N/A</div>
+            <div id="cell13">N/A</div>
+            <div id="cell14">N/A</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/battery_monitoring.js') }}"></script>
+{% endblock %}

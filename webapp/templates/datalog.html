@@ -1,0 +1,858 @@
+{% extends 'base.html' %} {% block title %}Data Log{% endblock %} {% block
+content %}
+<div class="space-y-6 p-4">
+  <!-- Filter Form Card -->
+  <div class="bg-white dark:bg-dark-secondary rounded-lg shadow-md p-6">
+    <h2
+      class="text-xl font-medium text-light-text-primary dark:text-dark-text-primary mb-4"
+    >
+      Data Filter
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Start Date -->
+      <div>
+        <label
+          class="block text-light-text-secondary dark:text-dark-text-secondary mb-2"
+        >
+          Start Date
+        </label>
+        <input
+          type="date"
+          id="start-date"
+          class="w-full px-4 py-2 rounded-md border border-light-border dark:border-dark-border bg-light-primary dark:bg-dark-primary text-light-text-primary dark:text-dark-text-primary focus:outline-none focus:ring-2 focus:ring-light-navbar dark:focus:ring-dark-navbar"
+        />
+      </div>
+
+      <!-- End Date -->
+      <div>
+        <label
+          class="block text-light-text-secondary dark:text-dark-text-secondary mb-2"
+        >
+          End Date
+        </label>
+        <input
+          type="date"
+          id="end-date"
+          class="w-full px-4 py-2 rounded-md border border-light-border dark:border-dark-border bg-light-primary dark:bg-dark-primary text-light-text-primary dark:text-dark-text-primary focus:outline-none focus:ring-2 focus:ring-light-navbar dark:focus:ring-dark-navbar"
+        />
+      </div>
+
+      <!-- Multi-select Dropdown -->
+      <div class="relative">
+        <label
+          class="block text-light-text-secondary dark:text-dark-text-secondary mb-2"
+        >
+          Select Sensors
+        </label>
+        <div class="relative">
+          <input
+            type="text"
+            id="sensor-select"
+            readonly
+            placeholder="Select sensors"
+            class="w-full px-4 py-2 rounded-md border border-light-border dark:border-dark-border bg-light-primary dark:bg-dark-primary text-light-text-primary dark:text-dark-text-primary focus:outline-none focus:ring-2 focus:ring-light-navbar dark:focus:ring-dark-navbar cursor-pointer"
+          />
+          <div
+            id="dropdown-menu"
+            class="hidden absolute z-50 w-full mt-1 bg-white dark:bg-dark-secondary border border-light-border dark:border-dark-border rounded-md shadow-lg max-h-60 overflow-y-auto"
+          >
+            <div class="p-2" id="sensor-dropdown-content">
+              <!-- Sensor checkboxes will be dynamically added here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Generate Button -->
+    <div class="mt-6">
+      <button
+        type="button"
+        id="generate-btn"
+        class="w-full bg-light-navbar hover:bg-red-700 text-white font-medium py-2.5 px-4 rounded-md transition-colors duration-200"
+      >
+        Generate Report
+      </button>
+    </div>
+  </div>
+
+  <!-- Data Table Card -->
+  <div
+    id="table-section"
+    class="hidden bg-white dark:bg-dark-secondary rounded-lg shadow-md p-6"
+  >
+    <div class="flex justify-between items-center mb-4">
+      <h2
+        class="text-xl font-medium text-light-text-primary dark:text-dark-text-primary"
+      >
+        Data Log Results
+      </h2>
+      <div class="flex items-center gap-4">
+        <!-- Export Button -->
+        <button
+          id="export-btn"
+          class="flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md transition-colors duration-200"
+        >
+          <i class="fas fa-file-export mr-2"></i>
+          Export CSV
+        </button>
+        <!-- Search -->
+        <div class="relative">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Search..."
+            class="w-64 px-4 py-2 rounded-md border border-light-border dark:border-dark-border bg-light-primary dark:bg-dark-primary text-light-text-primary dark:text-dark-text-primary focus:outline-none focus:ring-2 focus:ring-light-navbar dark:focus:ring-dark-navbar"
+          />
+          <i
+            class="fas fa-search absolute right-3 top-1/2 -translate-y-1/2 text-light-text-secondary dark:text-dark-text-secondary"
+          ></i>
+        </div>
+
+        <!-- Entries per page -->
+        <div class="flex items-center gap-2">
+          <span class="text-light-text-secondary dark:text-dark-text-secondary"
+            >Show</span
+          >
+          <select
+            id="entries-select"
+            class="px-3 py-1.5 border border-light-border dark:border-dark-border rounded bg-light-primary dark:bg-dark-primary text-light-text-primary dark:text-dark-text-primary focus:outline-none focus:ring-2 focus:ring-light-navbar dark:focus:ring-dark-navbar"
+          >
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+          <span class="text-light-text-secondary dark:text-dark-text-secondary"
+            >entries</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Wrapper -->
+    <div
+      class="relative overflow-x-auto border border-light-border dark:border-dark-border rounded-lg"
+    >
+      <table
+        class="min-w-full divide-y divide-light-border dark:divide-dark-border"
+      >
+        <thead>
+          <tr class="bg-light-secondary dark:bg-dark-hover">
+            <th
+              class="group px-4 py-3 text-left text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary tracking-wider cursor-pointer select-none"
+              data-sort="id"
+            >
+              No
+              <span class="ml-1 inline-block transition-transform duration-200"
+                >↕</span
+              >
+            </th>
+            <th
+              class="group px-4 py-3 text-left text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary tracking-wider cursor-pointer select-none"
+              data-sort="dateTime"
+            >
+              Date Time
+              <span class="ml-1 inline-block transition-transform duration-200"
+                >↕</span
+              >
+            </th>
+            <th
+              class="group px-4 py-3 text-left text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary tracking-wider cursor-pointer select-none"
+              data-sort="logStatus"
+            >
+              Site ID
+              <span class="ml-1 inline-block transition-transform duration-200"
+                >↕</span
+              >
+            </th>
+            <!-- Dynamic columns will be added here -->
+          </tr>
+        </thead>
+        <tbody
+          id="table-body"
+          class="bg-white dark:bg-dark-secondary divide-y divide-light-border dark:divide-dark-border"
+        >
+          <!-- Table rows will be dynamically added here -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex justify-between items-center mt-4">
+      <div
+        class="text-sm text-light-text-secondary dark:text-dark-text-secondary"
+      >
+        Showing <span id="showing-start">0</span> to
+        <span id="showing-end">0</span> of
+        <span id="total-entries">0</span> entries
+      </div>
+      <div class="flex gap-2">
+        <button
+          id="prev-page"
+          class="px-4 py-2 rounded border border-light-border dark:border-dark-border text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-secondary dark:hover:bg-dark-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+        >
+          Previous
+        </button>
+        <button
+          id="next-page"
+          class="px-4 py-2 rounded border border-light-border dark:border-dark-border text-light-text-secondary dark:text-dark-text-secondary hover:bg-light-secondary dark:hover:bg-dark-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+<script>
+  //<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // State variables
+    let currentPage = 1;
+    let entriesPerPage = 5;
+    let totalEntries = 0;
+    let tableData = [];
+    let filteredData = [];
+    let sortColumn = "id";
+    let sortDirection = "asc";
+    let searchTerm = "";
+    let selectedSensors = [];
+    let availableSensors = [];
+
+    // DOM Elements
+    const sensorSelect = document.getElementById("sensor-select");
+    const dropdownMenu = document.getElementById("dropdown-menu");
+    const sensorDropdownContent = document.getElementById(
+      "sensor-dropdown-content"
+    );
+    const tableBody = document.getElementById("table-body");
+    const tableSection = document.getElementById("table-section");
+    const generateBtn = document.getElementById("generate-btn");
+    const searchInput = document.getElementById("search-input");
+
+    // Format number function
+    function formatNumber(value) {
+      if (value === undefined || value === null || value === "") {
+        return "-";
+      }
+
+      // Handle strings that might be numbers
+      if (typeof value === "string") {
+        // Check if it's a number in string format
+        const num = parseFloat(value);
+        if (!isNaN(num)) {
+          return num.toFixed(2);
+        }
+        // If it's not a number, return as is
+        return value;
+      }
+
+      // Handle actual numbers
+      if (typeof value === "number") {
+        return value.toFixed(2);
+      }
+
+      // For any other type, return as string
+      return String(value);
+    }
+
+    // Clear pagination info when no data
+    function clearPaginationInfo() {
+      document.getElementById("showing-start").textContent = "0";
+      document.getElementById("showing-end").textContent = "0";
+      document.getElementById("total-entries").textContent = "0";
+      document.getElementById("prev-page").disabled = true;
+      document.getElementById("next-page").disabled = true;
+    }
+
+    // Format date and time
+    function formatDateTime(dateTimeStr) {
+      try {
+        const date = new Date(dateTimeStr);
+        // Gunakan format yang sesuai dengan yang diinginkan
+        return date
+          .toLocaleString("id-ID", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false,
+          })
+          .replace(",", "");
+      } catch (e) {
+        console.error("Error formatting date:", e);
+        return dateTimeStr;
+      }
+    }
+
+    // Fungsi untuk memuat daftar sensor dari backend
+    function loadSensorList() {
+      fetch("/api/sensor-list")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json();
+        })
+        .then((sensors) => {
+          console.log("Available sensors:", sensors);
+          availableSensors = sensors;
+
+          // Clear existing content first
+          sensorDropdownContent.innerHTML = `
+          <label class="flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded cursor-pointer">
+            <input type="checkbox" class="mr-2" value="all" /> Select All
+          </label>
+        `;
+
+          // Add checkbox for each sensor
+          sensors.forEach((sensor) => {
+            const label = document.createElement("label");
+            label.className =
+              "flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded cursor-pointer";
+
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.className = "mr-2";
+            checkbox.value = sensor;
+
+            const span = document.createElement("span");
+            span.textContent = sensor;
+
+            label.appendChild(checkbox);
+            label.appendChild(span);
+            sensorDropdownContent.appendChild(label);
+          });
+
+          // Add event listeners after creating checkboxes
+          const checkboxes = sensorDropdownContent.querySelectorAll(
+            'input[type="checkbox"]'
+          );
+          checkboxes.forEach((checkbox) => {
+            checkbox.addEventListener("change", handleSensorCheckboxChange);
+          });
+        })
+        .catch((error) => {
+          console.error("Error loading sensor list:", error);
+          alert("Failed to load sensor list: " + error.message);
+        });
+    }
+
+    // Handle checkbox changes
+    function handleSensorCheckboxChange(e) {
+      const allCheckbox =
+        sensorDropdownContent.querySelector('input[value="all"]');
+      const checkboxes = sensorDropdownContent.querySelectorAll(
+        'input[type="checkbox"]:not([value="all"])'
+      );
+
+      if (e.target.value === "all") {
+        // Select/deselect all
+        checkboxes.forEach((cb) => {
+          cb.checked = e.target.checked;
+        });
+      } else {
+        // Update "Select All" checkbox
+        const allChecked = Array.from(checkboxes).every((cb) => cb.checked);
+        allCheckbox.checked = allChecked;
+      }
+
+      // Update selected sensors
+      selectedSensors = Array.from(checkboxes)
+        .filter((cb) => cb.checked)
+        .map((cb) => cb.value);
+
+      // Update display
+      sensorSelect.value =
+        selectedSensors.length > 0
+          ? selectedSensors.join(", ")
+          : "Select sensors";
+    }
+
+    // Sort function
+    function handleSort(column) {
+      // Toggle sort direction
+      if (sortColumn === column) {
+        sortDirection = sortDirection === "asc" ? "desc" : "asc";
+      } else {
+        sortColumn = column;
+        sortDirection = "asc";
+      }
+
+      // Sort function implementation
+      filteredData.sort((a, b) => {
+        let aVal = a[column];
+        let bVal = b[column];
+
+        // Special handling for different column types
+        switch (column) {
+          case "id":
+            // Handle ID sorting (numeric)
+            aVal = parseInt(aVal) || 0;
+            bVal = parseInt(bVal) || 0;
+            break;
+
+          case "dateTime":
+            // Handle datetime sorting
+            aVal = new Date(aVal).getTime();
+            bVal = new Date(bVal).getTime();
+            break;
+
+          default:
+            // For other columns that might be numeric
+            if (typeof aVal === "string" && !isNaN(parseFloat(aVal))) {
+              aVal = parseFloat(aVal);
+              bVal = parseFloat(bVal);
+            }
+            // For non-numeric strings, use as is
+            break;
+        }
+
+        // Handle null/undefined values
+        if (aVal === null || aVal === undefined)
+          aVal = sortDirection === "asc" ? -Infinity : Infinity;
+        if (bVal === null || bVal === undefined)
+          bVal = sortDirection === "asc" ? -Infinity : Infinity;
+
+        // Compare values
+        if (sortDirection === "asc") {
+          return aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
+        } else {
+          return aVal < bVal ? 1 : aVal > bVal ? -1 : 0;
+        }
+      });
+
+      // Update sort indicators
+      document.querySelectorAll("th[data-sort]").forEach((th) => {
+        const sortSpan = th.querySelector("span");
+        if (th.getAttribute("data-sort") === column) {
+          sortSpan.textContent = sortDirection === "asc" ? "↑" : "↓";
+        } else {
+          sortSpan.textContent = "↕";
+        }
+      });
+
+      // Re-render table
+      renderTable();
+    }
+
+    // Fetch sensor data from backend
+    function fetchSensorData() {
+      const startDate = document.getElementById("start-date").value;
+      const endDate = document.getElementById("end-date").value;
+
+      // Show loading state
+      tableBody.innerHTML =
+        '<tr><td colspan="100%" class="text-center py-4">Loading data...</td></tr>';
+
+      fetch("/api/datalog", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          start_date: startDate,
+          end_date: endDate,
+          selected_sensors: selectedSensors,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            return response.json().then((err) => {
+              throw new Error(
+                err.message || "No data found for the selected criteria"
+              );
+            });
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Received data:", data);
+
+          if (Array.isArray(data) && data.length > 0) {
+            // Format datetime in the received data
+            tableData = data.map((item) => ({
+              ...item,
+              dateTime: formatDateTime(item.dateTime),
+            }));
+            filteredData = [...tableData];
+            currentPage = 1;
+            renderTable();
+            tableSection.classList.remove("hidden");
+          } else if (data.message) {
+            tableBody.innerHTML = `<tr><td colspan="100%" class="text-center py-4">${data.message}</td></tr>`;
+            clearPaginationInfo();
+          } else {
+            throw new Error("No data available for the selected criteria");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          tableBody.innerHTML = `<tr><td colspan="100%" class="text-center py-4 text-red-500">Error: ${error.message}</td></tr>`;
+          clearPaginationInfo();
+        });
+    }
+
+    // Render table with dynamic columns
+    function renderTable() {
+      if (!Array.isArray(filteredData)) {
+        console.error("filteredData is not an array:", filteredData);
+        return;
+      }
+
+      // Dynamically update table headers
+      const thead = document.querySelector("thead tr");
+      const existingColumns = thead.querySelectorAll("th[data-dynamic]");
+      existingColumns.forEach((col) => col.remove());
+
+      // Add dynamic columns
+      selectedSensors.forEach((sensor) => {
+        const th = document.createElement("th");
+        th.className =
+          "group px-4 py-3 text-left text-xs font-medium text-light-text-secondary dark:text-dark-text-secondary tracking-wider cursor-pointer select-none";
+        th.setAttribute("data-sort", sensor);
+        th.setAttribute("data-dynamic", "true");
+        th.innerHTML = `${sensor} <span class="ml-1 inline-block transition-transform duration-200">↕</span>`;
+        thead.appendChild(th);
+
+        // Add sort functionality to new columns
+        th.addEventListener("click", () => handleSort(sensor));
+      });
+
+      // Pagination and data rendering
+      const startIndex = (currentPage - 1) * entriesPerPage;
+      const endIndex = startIndex + entriesPerPage;
+      const pageData = filteredData.slice(startIndex, endIndex);
+
+      // Render rows
+      tableBody.innerHTML = pageData
+        .map((item) => {
+          try {
+            return `
+            <tr class="hover:bg-light-secondary dark:hover:bg-dark-hover">
+              <td class="px-4 py-2 whitespace-nowrap text-light-text-primary dark:text-dark-text-primary">${
+                item.id
+              }</td>
+              <td class="px-4 py-2 whitespace-nowrap text-light-text-primary dark:text-dark-text-primary">${
+                item.dateTime
+              }</td>
+              <td class="px-4 py-2 whitespace-nowrap text-light-text-primary dark:text-dark-text-primary">${
+                item.logStatus
+              }</td>
+              ${selectedSensors
+                .map(
+                  (sensor) => `
+                  <td class="px-4 py-2 whitespace-nowrap text-light-text-primary dark:text-dark-text-primary">
+                      ${formatNumber(item[sensor])}
+                  </td>
+              `
+                )
+                .join("")}
+            </tr>
+          `;
+          } catch (error) {
+            console.error("Error rendering row:", error, item);
+            return "";
+          }
+        })
+        .join("");
+
+      // Update pagination info
+      document.getElementById("showing-start").textContent = filteredData.length
+        ? startIndex + 1
+        : 0;
+      document.getElementById("showing-end").textContent = Math.min(
+        endIndex,
+        filteredData.length
+      );
+      document.getElementById("total-entries").textContent =
+        filteredData.length;
+
+      // Update pagination buttons
+      document.getElementById("prev-page").disabled = currentPage === 1;
+      document.getElementById("next-page").disabled =
+        endIndex >= filteredData.length;
+    }
+
+    // Search function
+    function searchData(data, term) {
+      if (!term) return data;
+      term = term.toLowerCase();
+
+      return data.filter((item) =>
+        Object.values(item).some((value) =>
+          String(value).toLowerCase().includes(term)
+        )
+      );
+    }
+
+    // Event Listeners
+
+    // Toggle dropdown
+    sensorSelect.addEventListener("click", () => {
+      dropdownMenu.classList.toggle("hidden");
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener("click", (e) => {
+      if (
+        !sensorSelect.contains(e.target) &&
+        !dropdownMenu.contains(e.target)
+      ) {
+        dropdownMenu.classList.add("hidden");
+      }
+    });
+
+    // Handle search input
+    searchInput.addEventListener("input", (e) => {
+      searchTerm = e.target.value;
+      currentPage = 1;
+      filteredData = searchData(tableData, searchTerm);
+      renderTable();
+    });
+
+    // Handle entries per page change
+    document
+      .getElementById("entries-select")
+      .addEventListener("change", (e) => {
+        entriesPerPage = parseInt(e.target.value);
+        currentPage = 1;
+        renderTable();
+      });
+
+    // Handle pagination
+    document.getElementById("prev-page").addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderTable();
+      }
+    });
+
+    document.getElementById("next-page").addEventListener("click", () => {
+      const maxPage = Math.ceil(filteredData.length / entriesPerPage);
+      if (currentPage < maxPage) {
+        currentPage++;
+        renderTable();
+      }
+    });
+
+    // Set default dates
+    function setDefaultDates() {
+      const today = new Date();
+      const lastWeek = new Date(today);
+      lastWeek.setDate(lastWeek.getDate() - 7);
+
+      document.getElementById("start-date").value =
+        formatDateForInput(lastWeek);
+      document.getElementById("end-date").value = formatDateForInput(today);
+    }
+
+    function formatDateForInput(date) {
+      // Gunakan metode yang mempertahankan zona waktu lokal
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    // Handle generate button click
+    generateBtn.addEventListener("click", () => {
+      const startDate = document.getElementById("start-date").value;
+      const endDate = document.getElementById("end-date").value;
+
+      if (!startDate || !endDate || selectedSensors.length === 0) {
+        alert("Please fill in all fields and select at least one sensor");
+        return;
+      }
+
+      // Validate dates
+      const startDateTime = new Date(startDate);
+      const endDateTime = new Date(endDate);
+
+      if (startDateTime > endDateTime) {
+        alert("Start date cannot be later than end date");
+        return;
+      }
+
+      // Show table section
+      tableSection.classList.remove("hidden");
+
+      // Fetch data from database
+      fetchSensorData();
+    });
+
+    // Add event listeners for column sorting
+    document.querySelectorAll("th[data-sort]").forEach((header) => {
+      header.addEventListener("click", () => {
+        const column = header.getAttribute("data-sort");
+        handleSort(column);
+      });
+    });
+
+    // Initialize
+    setDefaultDates();
+    loadSensorList();
+
+    // Add loading indicator
+    function showLoading() {
+      tableBody.innerHTML = `
+      <tr>
+        <td colspan="100%" class="text-center py-8">
+          <div class="flex items-center justify-center">
+            <svg class="animate-spin h-8 w-8 text-light-navbar" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span class="ml-2 text-light-text-secondary dark:text-dark-text-secondary">Loading data...</span>
+          </div>
+        </td>
+      </tr>
+    `;
+    }
+
+    // Error display helper
+    function showError(message) {
+      tableBody.innerHTML = `
+      <tr>
+        <td colspan="100%" class="text-center py-8">
+          <div class="text-red-500 dark:text-red-400">
+            <i class="fas fa-exclamation-circle mr-2"></i>
+            ${message}
+          </div>
+        </td>
+      </tr>
+    `;
+    }
+
+    // No data display helper
+    function showNoData() {
+      tableBody.innerHTML = `
+      <tr>
+        <td colspan="100%" class="text-center py-8">
+          <div class="text-light-text-secondary dark:text-dark-text-secondary">
+            <i class="fas fa-database mr-2"></i>
+            No data available for the selected criteria
+          </div>
+        </td>
+      </tr>
+    `;
+    }
+    // CSV Export Functions
+    function formatCSVValue(value) {
+      if (value === null || value === undefined) return "";
+
+      // Convert to string and handle special characters
+      const stringValue = String(value);
+      if (
+        stringValue.includes(",") ||
+        stringValue.includes('"') ||
+        stringValue.includes("\n")
+      ) {
+        return `"${stringValue.replace(/"/g, '""')}"`;
+      }
+      return stringValue;
+    }
+
+    function downloadCSV(csvContent, filename) {
+      const BOM = "\uFEFF"; // Add BOM for Excel compatibility
+      const blob = new Blob([BOM + csvContent], {
+        type: "text/csv;charset=utf-8;",
+      });
+
+      if (window.navigator.msSaveOrOpenBlob) {
+        // Handle IE11
+        window.navigator.msSaveOrOpenBlob(blob, filename);
+      } else {
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.href = url;
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }
+    }
+
+    function exportToCSV() {
+      if (!filteredData || filteredData.length === 0) {
+        alert("No data available to export");
+        return;
+      }
+
+      try {
+        // Create CSV header
+        const headers = ["No", "Date Time", "Site ID", ...selectedSensors];
+
+        // Create CSV content
+        const csvRows = [
+          // Header row
+          headers.map(formatCSVValue).join(","),
+          // Data rows
+          ...filteredData.map((row) => {
+            const values = [
+              formatCSVValue(row.id),
+              formatCSVValue(row.dateTime),
+              formatCSVValue(row.logStatus),
+              ...selectedSensors.map((sensor) => formatCSVValue(row[sensor])),
+            ];
+            return values.join(",");
+          }),
+        ];
+
+        // Generate filename with current date
+        const date = new Date();
+        const timestamp = date.toISOString().replace(/[:.]/g, "-").slice(0, 19);
+        const filename = `sensor_data_${timestamp}.csv`;
+
+        // Download the file
+        downloadCSV(csvRows.join("\n"), filename);
+      } catch (error) {
+        console.error("Error exporting CSV:", error);
+        alert("Error exporting data to CSV. Please try again.");
+      }
+    }
+
+    // Add event listener for export button
+    document
+      .getElementById("export-btn")
+      .addEventListener("click", exportToCSV);
+    // Export helpers (if needed later)
+    function exportToCSV() {
+      if (!filteredData.length) {
+        alert("No data to export");
+        return;
+      }
+
+      const headers = ["ID", "Date Time", "Site ID", ...selectedSensors];
+      const csvContent = [
+        headers.join(","),
+        ...filteredData.map((row) => {
+          return [
+            row.id,
+            row.dateTime,
+            row.logStatus,
+            ...selectedSensors.map((sensor) => formatNumber(row[sensor])),
+          ].join(",");
+        }),
+      ].join("\n");
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      if (navigator.msSaveBlob) {
+        navigator.msSaveBlob(blob, "sensor_data.csv");
+      } else {
+        link.href = URL.createObjectURL(blob);
+        link.setAttribute("download", "sensor_data.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+  });
+</script>
+{% endblock %}

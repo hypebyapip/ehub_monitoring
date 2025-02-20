@@ -1,0 +1,510 @@
+{% extends "base.html" %}
+
+{% block title %}Measurement Calibration{% endblock %}
+
+{% block content %}
+<div class="space-y-6 p-4">
+    <!-- Popup Notifications -->
+    <div id="popup" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-300 ease-in-out scale-0">
+        Data berhasil disimpan!
+    </div>
+
+    <!-- Delete Confirmation Popup -->
+    <div id="deletePopup" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-dark-secondary p-6 rounded-lg shadow-lg">
+        <p class="text-lg font-medium text-light-text-primary dark:text-dark-text-primary">Apakah Anda yakin ingin menghapus tenant ini?</p>
+        <div class="mt-4 flex justify-end space-x-2">
+            <button id="confirmDelete" class="px-4 py-2 bg-red-500 text-white rounded">Ya</button>
+            <button onclick="UI.closeDeletePopup()" class="px-4 py-2 bg-gray-500 text-white rounded">Tidak</button>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Site Location Configuration -->
+        <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
+            <h2 class="text-lg font-medium mb-4 text-light-text-primary dark:text-dark-text-primary">Konfigurasi Lokasi Site</h2>
+            <form id="siteForm">
+                <div class="flex items-center mb-2">
+                    <label class="text-sm text-light-text-secondary dark:text-dark-text-secondary w-32">Site ID</label>
+                    <input type="text" id="site_id" name="site_id" class="bg-gray-100 dark:bg-dark-hover p-2 rounded flex-1 border border-light-border dark:border-dark-border" required>
+                </div>
+                <div class="flex items-center mb-2">
+                    <label class="text-sm text-light-text-secondary dark:text-dark-text-secondary w-32">Nama Site</label>
+                    <input type="text" id="site_name" name="site_name" class="bg-gray-100 dark:bg-dark-hover p-2 rounded flex-1 border border-light-border dark:border-dark-border" required>
+                </div>
+                <div class="flex items-center mb-2">
+                    <label class="text-sm text-light-text-secondary dark:text-dark-text-secondary w-32">Alamat</label>
+                    <input type="text" id="address" name="address" class="bg-gray-100 dark:bg-dark-hover p-2 rounded flex-1 border border-light-border dark:border-dark-border" required>
+                </div>
+                <div class="flex items-center mb-2">
+                    <label class="text-sm text-light-text-secondary dark:text-dark-text-secondary w-32">Alamat IP</label>
+                    <input type="text" id="ip_address" name="ip_address" class="bg-gray-100 dark:bg-dark-hover p-2 rounded flex-1 border border-light-border dark:border-dark-border" required>
+                </div>
+                <div class="flex items-center mb-2">
+                    <label class="text-sm text-light-text-secondary dark:text-dark-text-secondary w-32">Net Mask</label>
+                    <input type="text" id="net_mask" name="net_mask" class="bg-gray-100 dark:bg-dark-hover p-2 rounded flex-1 border border-light-border dark:border-dark-border" required>
+                </div>
+                <div class="flex items-center mb-6">
+                    <label class="text-sm text-light-text-secondary dark:text-dark-text-secondary w-32">Tanggal Update</label>
+                    <input type="date" id="update_date" name="update_date" class="bg-gray-100 dark:bg-dark-hover p-2 rounded flex-1 border border-light-border dark:border-dark-border text-light-text-primary dark:text-dark-text-primary" required>
+                </div>
+
+                <div class="mt-4 flex justify-end space-x-2">
+                    <button type="submit" class="px-6 py-2 bg-green-500 text-white rounded">Simpan</button>
+                    <button type="button" id="refreshSiteBtn" class="px-4 py-2 bg-blue-500 text-white rounded">Refresh</button>
+                </div>          
+            </form>
+        </div>
+
+        <!-- Add New Tenant -->
+        <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
+            <h2 class="text-lg font-medium mb-4 text-light-text-primary dark:text-dark-text-primary">Tambah Tenant Baru</h2>
+            <form id="tenantForm">
+                <div class="flex items-center mb-2">
+                    <label class="text-sm text-light-text-secondary dark:text-dark-text-secondary w-32">Nama Tenant</label>
+                    <input type="text" id="tenant_name" name="tenant_name" class="bg-gray-100 dark:bg-dark-hover p-2 rounded flex-1 border border-light-border dark:border-dark-border" required>
+                </div>
+                <div class="flex items-center mb-2">
+                    <label class="text-sm text-light-text-secondary dark:text-dark-text-secondary w-32">Daya Dibutuhkan</label>
+                    <input type="number" step="0.1" id="power" name="power" class="bg-gray-100 dark:bg-dark-hover p-2 rounded flex-1 border border-light-border dark:border-dark-border" required>
+                </div>
+                <div class="flex items-center mb-2">
+                    <label class="text-sm text-light-text-secondary dark:text-dark-text-secondary w-32">Hari Otonomi</label>
+                    <input type="number" id="autonomus_day" name="autonomus_day" class="bg-gray-100 dark:bg-dark-hover p-2 rounded flex-1 border border-light-border dark:border-dark-border" required>
+                </div>
+                <div class="flex items-center mb-2">
+                    <label class="text-sm text-light-text-secondary dark:text-dark-text-secondary w-32">Tanggal Operasi</label>
+                    <input type="date" id="operation_date" name="operation_date" class="bg-gray-100 dark:bg-dark-hover p-2 rounded flex-1 border border-light-border dark:border-dark-border" required>
+                </div>
+                <div class="flex items-center mb-2">
+                    <label class="text-sm text-light-text-secondary dark:text-dark-text-secondary w-32">Upgrade Perangkat</label>
+                    <select id="device_upgrade" name="device_upgrade" class="bg-gray-100 dark:bg-dark-hover p-2 rounded flex-1 border border-light-border dark:border-dark-border">
+                        <option value="false">Tidak</option>
+                        <option value="true">Ya</option>
+                    </select>
+                </div>
+                <div class="flex items-center mb-6">
+                    <label class="text-sm text-light-text-secondary dark:text-dark-text-secondary w-32">Tanggal Update</label>
+                    <input type="date" id="update_date" name="update_date" class="bg-gray-100 dark:bg-dark-hover p-2 rounded flex-1 border border-light-border dark:border-dark-border">
+                </div>
+
+                <div class="mt-4 flex justify-end space-x-2">
+                    <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded">Daftar</button>
+                </div>            
+            </form>
+        </div>
+    </div>
+    
+    <!-- Tenant List -->
+    <div class="bg-white dark:bg-dark-secondary shadow rounded-lg w-full p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="dark:text-dark-text-primary font-bold">Daftar Tenant</h2>
+            <span id="userCount" class="bg-purple-100 text-purple-700 text-sm font-medium px-3 py-1 rounded-full">
+                0 tenant
+            </span>
+        </div>
+
+        <div class="overflow-x-auto">
+            <div id="searchContainer" class="mb-4"></div>
+            <table id="userTable" class="w-full border-collapse border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border">Nama Tenant</th>
+                        <th class="py-2 px-4 border">Daya Dibutuhkan</th>
+                        <th class="py-2 px-4 border">Hari Otonomi</th>
+                        <th class="py-2 px-4 border">Tanggal Operasi</th>
+                        <th class="py-2 px-4 border">Upgrade Perangkat</th>
+                        <th class="py-2 px-4 border">Tanggal Update</th>
+                        <th class="py-2 px-4 border text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="tenantTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+// Site and Tenant Management UI Interactions
+class SiteAndTenantUI {
+    constructor() {
+        this.initEventListeners();
+        this.loadInitialData();
+    }
+
+    initEventListeners() {
+        // Site Form Submission
+        const siteForm = document.getElementById('siteForm');
+        if (siteForm) {
+            siteForm.addEventListener('submit', this.handleSiteSave.bind(this));
+        }
+
+        // Tenant Form Submission 
+        const tenantForm = document.getElementById('tenantForm');
+        if (tenantForm) {
+            tenantForm.addEventListener('submit', this.handleTenantAdd.bind(this));
+        }
+
+        // Refresh Site Button
+        const refreshSiteBtn = document.getElementById('refreshSiteBtn');
+        if (refreshSiteBtn) {
+            refreshSiteBtn.addEventListener('click', this.loadInitialData.bind(this));
+        }
+    }
+
+    // Load initial data when page loads
+    loadInitialData() {
+        this.loadSiteData();
+        this.loadTenantData();
+    }
+
+    // Load and populate site data
+    async loadSiteData() {
+        try {
+            const response = await fetch('/site/data', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to load site data');
+            }
+
+            const data = await response.json();
+            
+            if (data.site) {
+                document.getElementById('site_id').value = data.site.site_id || '';
+                document.getElementById('site_name').value = data.site.site_name || '';
+                document.getElementById('address').value = data.site.address || '';
+                document.getElementById('ip_address').value = data.site.ip_address || '';
+                document.getElementById('net_mask').value = data.site.net_mask || '';
+                
+                // Set update date if available
+                const updateDate = data.site.updated_at ? new Date(data.site.updated_at).toISOString().split('T')[0] : '';
+                document.getElementById('update_date').value = updateDate;
+            }
+        } catch (error) {
+            this.showPopup('Error loading site data', 'error');
+            console.error('Error:', error);
+        }
+    }
+
+    // Handle site settings save
+    async handleSiteSave(event) {
+        event.preventDefault();
+        
+        const formData = new FormData(event.target);
+        
+        try {
+            const response = await fetch('/site/save', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                this.showPopup('Site settings saved successfully!', 'success');
+                this.loadSiteData(); // Refresh data
+            } else {
+                this.showPopup(result.message || 'Failed to save site settings', 'error');
+            }
+        } catch (error) {
+            this.showPopup('Error saving site settings', 'error');
+            console.error('Error:', error);
+        }
+    }
+
+    // Load and populate tenant data
+    async loadTenantData() {
+        try {
+            const response = await fetch('/site/data', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to load tenant data');
+            }
+
+            const data = await response.json();
+            const tenantTableBody = document.getElementById('tenantTableBody');
+            
+            // Clear existing rows
+            tenantTableBody.innerHTML = '';
+
+            // Populate tenant table
+            if (data.tenants && data.tenants.length > 0) {
+                data.tenants.forEach(tenant => {
+                    const row = this.createTenantRow(tenant);
+                    tenantTableBody.appendChild(row);
+                });
+
+                // Update tenant count
+                this.updateTenantCount(data.tenants.length);
+            } else {
+                this.updateTenantCount(0);
+            }
+        } catch (error) {
+            this.showPopup('Error loading tenant data', 'error');
+            console.error('Error:', error);
+        }
+    }
+                // Create table row for a tenant
+    createTenantRow(tenant) {
+        const row = document.createElement('tr');
+        row.dataset.tenantId = tenant.id;
+        row.innerHTML = `
+            <td class="py-2 px-4 border">${tenant.tenant_name}</td>
+            <td class="py-2 px-4 border">${tenant.power}</td>
+            <td class="py-2 px-4 border">${tenant.autonomus_day}</td>
+            <td class="py-2 px-4 border">${tenant.operation_date ? new Date(tenant.operation_date).toLocaleDateString() : ''}</td>
+            <td class="py-2 px-4 border">${tenant.device_upgrades}</td>
+            <td class="py-2 px-4 border">${tenant.update_date ? new Date(tenant.update_date).toLocaleDateString() : ''}</td>
+            <td class="py-2 px-4 border text-center">
+                <button onclick="siteAndTenantUI.editTenant(${tenant.id})" class="text-blue-500 hover:text-blue-700 mr-2">✏️</button>
+                <button onclick="siteAndTenantUI.confirmDeleteTenant(${tenant.id})" class="text-red-500 hover:text-red-700">🗑️</button>
+            </td>
+        `;
+        return row;
+    }
+
+    // Handle tenant addition
+    async handleTenantAdd(event) {
+        event.preventDefault();
+        
+        const formData = new FormData(event.target);
+        
+        try {
+            const response = await fetch('/tenant/add', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                this.showPopup('Tenant added successfully!', 'success');
+                this.loadTenantData(); // Refresh tenant list
+                event.target.reset(); // Clear form
+            } else {
+                this.showPopup(result.message || 'Failed to add tenant', 'error');
+            }
+        } catch (error) {
+            this.showPopup('Error adding tenant', 'error');
+            console.error('Error:', error);
+        }
+    }
+
+    // Edit tenant (show edit modal or inline editing)
+    editTenant(tenantId) {
+        const row = document.querySelector(`tr[data-tenant-id="${tenantId}"]`);
+        if (!row) return;
+
+        // Convert cells to input fields
+        const cells = row.querySelectorAll('td:not(:last-child)');
+        cells.forEach((cell, index) => {
+            const originalValue = cell.textContent.trim();
+            let inputElement;
+            
+            // Determine input type based on column
+            switch(index) {
+                case 0: // Tenant Name
+                    inputElement = document.createElement('input');
+                    inputElement.type = 'text';
+                    inputElement.value = originalValue;
+                    break;
+                case 1: // Power
+                    inputElement = document.createElement('input');
+                    inputElement.type = 'number';
+                    inputElement.step = '0.1';
+                    inputElement.value = originalValue;
+                    break;
+                case 2: // Autonomous Day
+                    inputElement = document.createElement('input');
+                    inputElement.type = 'number';
+                    inputElement.value = originalValue;
+                    break;
+                case 3: // Operation Date
+                    inputElement = document.createElement('input');
+                    inputElement.type = 'date';
+                    // Convert current text date to YYYY-MM-DD format for date input
+                    const operationDate = this.convertToDateInputFormat(originalValue);
+                    inputElement.value = operationDate;
+                    break;
+                case 4: // Device Upgrades
+                    inputElement = document.createElement('select');
+                    ['Tidak', 'Ya'].forEach(option => {
+                        const optionEl = document.createElement('option');
+                        optionEl.value = option === 'Ya' ? 'true' : 'false';
+                        optionEl.textContent = option;
+                        optionEl.selected = originalValue === option;
+                        inputElement.appendChild(optionEl);
+                    });
+                    break;
+                case 5: // Update Date
+                    inputElement = document.createElement('input');
+                    inputElement.type = 'date';
+                    // Convert current text date to YYYY-MM-DD format for date input
+                    const updateDate = this.convertToDateInputFormat(originalValue);
+                    inputElement.value = updateDate;
+                    break;
+            }
+
+            inputElement.classList.add('w-full', 'p-1', 'border', 'rounded');
+            cell.innerHTML = '';
+            cell.appendChild(inputElement);
+        });
+
+        // Change edit button to save button
+        const actionCell = row.querySelector('td:last-child');
+        const editButton = actionCell.querySelector('button:first-child');
+        editButton.textContent = '✔️';
+        editButton.onclick = () => this.saveTenant(tenantId);
+    }
+
+    // Convert localized date to YYYY-MM-DD format for date input
+    convertToDateInputFormat(dateString) {
+        if (!dateString) return '';
+        try {
+            const date = new Date(dateString);
+            // Check if date is valid
+            if (isNaN(date.getTime())) return '';
+            
+            // Convert to YYYY-MM-DD
+            return date.toISOString().split('T')[0];
+        } catch {
+            return '';
+        }
+    }
+
+    // Save edited tenant
+    async saveTenant(tenantId) {
+        const row = document.querySelector(`tr[data-tenant-id="${tenantId}"]`);
+        if (!row) return;
+
+        const formData = new FormData();
+        const cells = row.querySelectorAll('td:not(:last-child)');
+        
+        // Mapping of cell indices to form field names
+        const fieldNames = [
+            'tenant_name', 
+            'power', 
+            'autonomus_day', 
+            'operation_date', 
+            'device_upgrade', 
+            'update_date'
+        ];
+
+        cells.forEach((cell, index) => {
+            const input = cell.querySelector('input, select');
+            const value = input.value;
+            formData.append(fieldNames[index], value);
+        });
+
+        try {
+            const response = await fetch(`/tenant/update/${tenantId}`, {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                this.showPopup('Tenant updated successfully!', 'success');
+                this.loadTenantData(); // Refresh tenant list
+            } else {
+                this.showPopup(result.message || 'Failed to update tenant', 'error');
+            }
+        } catch (error) {
+            this.showPopup('Error updating tenant', 'error');
+            console.error('Error:', error);
+        }
+    }
+
+    // Confirm delete tenant
+    confirmDeleteTenant(tenantId) {
+        const deletePopup = document.getElementById('deletePopup');
+        if (deletePopup) {
+            deletePopup.classList.remove('hidden');
+            
+            // Remove any existing event listeners to prevent multiple bindings
+            const confirmDeleteBtn = document.getElementById('confirmDelete');
+            const existingHandler = confirmDeleteBtn.onclick;
+            if (existingHandler) {
+                confirmDeleteBtn.removeEventListener('click', existingHandler);
+            }
+            
+            // Add new event listener for delete confirmation
+            confirmDeleteBtn.onclick = () => this.deleteTenant(tenantId);
+        }
+    }
+
+    // Delete tenant
+    async deleteTenant(tenantId) {
+        try {
+            const response = await fetch(`/tenant/delete/${tenantId}`, {
+                method: 'POST'
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                this.showPopup('Tenant deleted successfully!', 'success');
+                this.loadTenantData(); // Refresh tenant list
+                this.closeDeletePopup();
+            } else {
+                this.showPopup(result.message || 'Failed to delete tenant', 'error');
+            }
+        } catch (error) {
+            this.showPopup('Error deleting tenant', 'error');
+            console.error('Error:', error);
+        }
+    }
+
+    // Close delete confirmation popup
+    closeDeletePopup() {
+        const deletePopup = document.getElementById('deletePopup');
+        if (deletePopup) {
+            deletePopup.classList.add('hidden');
+        }
+    }
+
+    // Update tenant count in UI
+    updateTenantCount(count) {
+        const userCountEl = document.getElementById('userCount');
+        if (userCountEl) {
+            userCountEl.textContent = `${count} tenant`;
+        }
+    }
+
+    // Show popup notification
+    showPopup(message, type = 'success') {
+        const popup = document.getElementById('popup');
+        if (popup) {
+            popup.textContent = message;
+            popup.classList.remove('hidden', 'bg-green-500', 'bg-red-500');
+            popup.classList.add('scale-100');
+            
+            // Set color based on type
+            popup.classList.add(type === 'success' ? 'bg-green-500' : 'bg-red-500');
+
+            // Automatically hide popup after 3 seconds
+            setTimeout(() => {
+                popup.classList.remove('scale-100');
+                popup.classList.add('scale-0');
+            }, 3000);
+        }
+    }
+}
+
+// Initialize the UI when the document is ready
+document.addEventListener('DOMContentLoaded', () => {
+    // Make the instance globally accessible
+    window.siteAndTenantUI = new SiteAndTenantUI();
+});
+</script>
+{% endblock %}

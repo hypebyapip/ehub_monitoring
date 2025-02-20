@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block title %}Solar Charge Controller Status{% endblock %}
+
+{% block head %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/scc_monitoring.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+  <!-- Total System Stats Card -->
+  <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-4">
+    <div class="bg-gray-100 dark:bg-dark-hover rounded-t-lg border-b border-light-border dark:border-dark-border p-1">
+      <div class="flex items-center gap-2 p-2 justify-center">
+        <h2 class="font-medium text-light-text-primary dark:text-dark-text-primary">
+          <i class="fa-solid fa-chart-line mr-2"></i>System Total
+        </h2>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 rounded-b-lg border border-light-border dark:border-dark-border gap-4 text-center p-4">
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">Total PV Power</p>
+        <p id="total-pv-power" class="text-2xl text-light-text-primary dark:text-dark-text-primary font-medium">0.00 W</p>
+      </div>
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">Total SCC Power</p>
+        <p id="total-scc-power" class="text-2xl text-light-text-primary dark:text-dark-text-primary font-medium">0.00 W</p>
+      </div>
+      <div>
+        <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">System Efficiency</p>
+        <p id="system-efficiency" class="text-2xl text-light-text-primary dark:text-dark-text-primary font-medium">0.00 %</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- SCC Cards - Only show active SCCs -->
+    {% for scc in scc_list %}
+    {% if scc.is_active %}
+    <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-4">
+      <div id="scc{{ scc.scc_number }}-status" class="h-1 w-full rounded-t-lg mb-2" style="background-color: #dc3545;"></div>
+      <div class="bg-gray-100 dark:bg-dark-hover rounded-t-lg border-b border-light-border dark:border-dark-border p-1">
+        <div class="flex items-center gap-2 p-2 justify-center">
+          <h2 class="font-medium text-light-text-primary dark:text-dark-text-primary">
+            <i class="fa-solid fa-solar-panel mr-2"></i>Solar Charge Controller {{ scc.scc_number }}
+          </h2>
+        </div>
+      </div>
+      
+      <!-- PV Metrics -->
+      <div class="grid grid-cols-3 border border-light-border dark:border-dark-border text-center p-4">
+        <div>
+          <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">PV Voltage</p>
+          <p id="pv{{ scc.scc_number }}-voltage" class="text-lg font-bold">0.00 V</p>
+        </div>
+        <div>
+          <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">PV Current</p>
+          <p id="pv{{ scc.scc_number }}-current" class="text-lg font-bold">0.00 A</p>
+        </div>
+        <div>
+          <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">PV Power</p>
+          <p id="pv{{ scc.scc_number }}-power" class="text-lg font-bold">0.00 W</p>
+        </div>
+      </div>
+      
+      <!-- SCC Metrics -->
+      <div class="grid grid-cols-4 border border-light-border dark:border-dark-border text-center p-4">
+        <div>
+          <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">SCC Voltage</p>
+          <p id="scc{{ scc.scc_number }}-voltage" class="text-lg font-bold">0.00 V</p>
+        </div>
+        <div>
+          <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">SCC Current</p>
+          <p id="scc{{ scc.scc_number }}-current" class="text-lg font-bold">0.00 A</p>
+        </div>
+        <div>
+          <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">SCC Power</p>
+          <p id="scc{{ scc.scc_number }}-power" class="text-lg font-bold">0.00 W</p>
+        </div>
+        <div>
+          <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">SCC Temp</p>
+          <p id="scc{{ scc.scc_number }}-temp" class="text-lg font-bold">0.00 °C</p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

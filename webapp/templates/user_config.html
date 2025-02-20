@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block title %}Measurement Calibration{% endblock %}
+
+{% block content %}
+
+<div class="space-y-6 p-4">
+    <!-- Notifikasi Popup -->
+    <div id="popup" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-300 ease-in-out scale-0">
+        Data berhasil disimpan!
+    </div>
+
+    <!-- Konfirmasi Delete Popup -->
+    <div id="deletePopup" class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-dark-secondary p-6 rounded-lg shadow-lg">
+        <p class="text-lg font-medium text-light-text-primary dark:text-dark-text-primary">Apakah Anda yakin ingin menghapus user ini?</p>
+        <div class="mt-4 flex justify-end space-x-2">
+            <button id="confirmDelete" class="px-4 py-2 bg-red-500 text-white rounded">Yes</button>
+            <button onclick="closeDeletePopup()" class="px-4 py-2 bg-gray-500 text-white rounded">No</button>
+        </div>
+    </div>
+
+    
+        
+        <!-- Add New User -->
+    <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
+        <h2 class="text-lg font-medium mb-4 text-light-text-primary dark:text-dark-text-primary">Add New User</h2>
+        <div>
+            <div class="flex items-center mb-2">
+                <label class="text-sm text-light-text-secondary dark:text-dark-text-secondary w-32">User Name</label>
+                <input type="text" id="username" class="bg-gray-100 dark:bg-dark-hover p-2 rounded flex-1 border border-light-border dark:border-dark-border">
+            </div>
+            <div class="flex items-center mb-2">
+                <label class="text-sm text-light-text-secondary dark:text-dark-text-secondary w-32">Level</label>
+                <select id="userLevel" class="bg-gray-100 dark:bg-dark-hover p-2 rounded flex-1 border border-light-border dark:border-dark-border">
+                    <option value="Admin">Admin</option>
+                    <option value="User">User</option>
+                </select>
+            </div>
+            <div class="flex items-center mb-2">
+                <label class="text-sm text-light-text-secondary dark:text-dark-text-secondary w-32">Password</label>
+                <input type="password" id="password" class="bg-gray-100 dark:bg-dark-hover p-2 rounded flex-1 border border-light-border dark:border-dark-border">
+            </div>
+            <div class="flex items-center mb-2">
+                <label class="text-sm text-light-text-secondary dark:text-dark-text-secondary w-32">Confirm Password</label>
+                <input type="password" id="confirmPassword" class="bg-gray-100 dark:bg-dark-hover p-2 rounded flex-1 border border-light-border dark:border-dark-border">
+            </div>
+
+            <div class="mt-4 flex justify-end space-x-2">
+                <button onclick="addUser()" class="px-4 py-2 bg-blue-500 text-white rounded">Register</button>
+            </div>          
+        </div>
+    </div>
+    <!-- User Members Table -->
+    <div class="bg-white dark:bg-dark-secondary shadow rounded-lg w-full p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="dark:text-dark-text-primary font-bold">User Members</h2>
+            <span id="userCount" class="bg-purple-100 text-purple-700 text-sm font-medium px-3 py-1 rounded-full">
+                1 users
+            </span>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="dark:text-dark-text-primary w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b">
+                        <th class="py-2 px-4 text-gray-600">Username</th>
+                        <th class="py-2 px-4 text-gray-600">Level</th>
+                        <th class="py-2 px-4 text-gray-600">Password</th>
+                        <th class="py-2 px-4 text-gray-600"></th>
+                    </tr>
+                </thead>
+                <tbody id="userTable">
+                    <tr class="border-b">
+                        <td class="py-3 px-4">Supri</td>
+                        <td class="py-3 px-4">Admin</td>
+                        <td class="py-3 px-4">Supri12345</td>
+                        <td class="py-3 px-4">
+                            <button class="text-gray-500 hover:text-red-500" onclick="confirmDelete(this)">
+                                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M8 6v12a2 2 0 002 2h4a2 2 0 002-2V6m-5 4v4" />
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+    
+    
+
+<script>
+    function showPopup(message) {
+        var popup = document.getElementById("popup");
+        popup.innerText = message;
+        popup.classList.remove("hidden");
+        popup.classList.remove("scale-0");
+        popup.classList.add("scale-100");
+
+        setTimeout(function() {
+            popup.classList.remove("scale-100");
+            popup.classList.add("scale-0");
+
+            setTimeout(() => {
+                popup.classList.add("hidden");
+            }, 300);
+        }, 3000);
+    }
+
+    function addUser() {
+        var username = document.getElementById("username").value.trim();
+        var userLevel = document.getElementById("userLevel").value;
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirmPassword").value;
+
+        if (username === "" || password === "" || confirmPassword === "") {
+            alert("Semua field harus diisi!");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            alert("Password tidak cocok!");
+            return;
+        }
+
+        var table = document.getElementById("userTable");
+        var newRow = table.insertRow();
+
+        newRow.innerHTML = `
+            <td class="py-3 px-4">${username}</td>
+            <td class="py-3 px-4">${userLevel}</td>
+            <td class="py-3 px-4">${password}</td>
+            <td class="py-3 px-4">
+                <button class="text-gray-500 hover:text-red-500" onclick="deleteRow(this)">
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M8 6v12a2 2 0 002 2h4a2 2 0 002-2V6m-5 4v4" />
+                    </svg>
+                </button>
+            </td>
+        `;
+
+        document.getElementById("username").value = "";
+        document.getElementById("password").value = "";
+        document.getElementById("confirmPassword").value = "";
+
+        updateUserCount();
+        showPopup("User berhasil ditambahkan!");
+    }
+
+    function deleteRow(button) {
+        var row = button.closest("tr");
+        row.remove();
+        updateUserCount();
+    }
+
+    function updateUserCount() {
+        var count = document.querySelectorAll("#userTable tr").length;
+        document.getElementById("userCount").innerText = count + " users";
+    }
+
+    let deleteTarget = null;
+    function confirmDelete(button) {
+        deleteTarget = button.closest("tr");
+        document.getElementById("deletePopup").classList.remove("hidden");
+    }
+
+    function closeDeletePopup() {
+        document.getElementById("deletePopup").classList.add("hidden");
+    }
+
+    document.getElementById("confirmDelete").addEventListener("click", function() {
+        if (deleteTarget) {
+            deleteTarget.remove();
+            updateUserCount();
+            closeDeletePopup();
+        }
+    });
+
+    function updateUserCount() {
+        var count = document.querySelectorAll("#userTable tr").length;
+        document.getElementById("userCount").innerText = count + " users";
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 h-100">
+  <!-- Site Location -->
+  <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
+    <h2 class="text-lg font-medium mb-4 text-light-text-primary dark:text-dark-text-primary">Site Location</h2>
+    <form class="space-y-4">
+      <div class="space-y-2">
+        <label class="block text-sm text-light-text-secondary dark:text-dark-text-secondary">Site ID</label>
+        <input type="text" class="w-full p-2 border rounded-md border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover">
+      </div>
+      <div class="space-y-2">
+        <label class="block text-sm text-light-text-secondary dark:text-dark-text-secondary">Site Name</label>
+        <input type="text" class="w-full p-2 border rounded-md border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover">
+      </div>
+      <div class="space-y-2">
+        <label class="block text-sm text-light-text-secondary dark:text-dark-text-secondary">Address</label>
+        <input type="text" class="w-full p-2 border rounded-md border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover">
+      </div>
+      <div class="space-y-2">
+        <label class="block text-sm text-light-text-secondary dark:text-dark-text-secondary">IP Address</label>
+        <input type="text" class="w-full p-2 border rounded-md border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover">
+      </div>
+      <div class="space-y-2">
+        <label class="block text-sm text-light-text-secondary dark:text-dark-text-secondary">Net mask</label>
+        <input type="text" class="w-full p-2 border rounded-md border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover">
+      </div>
+      <div class="space-y-2">
+        <label class="block text-sm text-light-text-secondary dark:text-dark-text-secondary">Gateway</label>
+        <input type="text" class="w-full p-2 border rounded-md border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover">
+      </div>
+      <div class="flex space-x-2">
+        <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Save</button>
+        <button type="button" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">Register</button>
+        <button type="reset" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">Reset</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Site Date -->
+  <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
+    <h2 class="text-lg font-medium mb-4 text-light-text-primary dark:text-dark-text-primary">Site Date</h2>
+    <form class="space-y-4">
+      <div class="space-y-2">
+        <label class="block text-sm text-light-text-secondary dark:text-dark-text-secondary">Date</label>
+        <input type="date" class="w-full p-2 border rounded-md border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover">
+      </div>
+      <div class="space-y-2">
+        <label class="block text-sm text-light-text-secondary dark:text-dark-text-secondary">Time</label>
+        <input type="time" class="w-full p-2 border rounded-md border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover">
+      </div>
+      <div class="flex space-x-2">
+        <button type="submit" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">Save</button>
+        <button type="button" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Refresh</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Measurement Calibration -->
+  <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
+    <h2 class="text-lg font-medium mb-4 text-light-text-primary dark:text-dark-text-primary">Measurement Calibration</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr class="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+            <th class="p-2 text-left">Parameter</th>
+            <th class="p-2 text-left">Scale Factor</th>
+            <th class="p-2 text-left">Input</th>
+            <th class="p-2 text-left">Block Value</th>
+            <th class="p-2 text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="p-2">Bus Voltage</td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Set</button></td>
+          </tr>
+          <tr>
+            <td class="p-2">BTS Current</td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Set</button></td>
+          </tr>
+          <tr>
+            <td class="p-2">MKV/KAV Current</td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Set</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- LVD Setpoint Setting -->
+  <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
+    <h2 class="text-lg font-medium mb-4 text-light-text-primary dark:text-dark-text-primary">LVD Setpoint Setting</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr class="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+            <th class="p-2 text-left">Channel</th>
+            <th class="p-2 text-left">Disconnect Voltage</th>
+            <th class="p-2 text-left">Reconnect Voltage</th>
+            <th class="p-2 text-left">LVD Status</th>
+            <th class="p-2 text-left">Set</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="p-2">LVD Load</td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td>Enable</td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Set</button></td>
+          </tr>
+          <tr>
+            <td class="p-2">LVD BTS</td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td>Enable</td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Set</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SNMP Network Settings -->
+  <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
+    <h2 class="text-lg font-medium mb-4 text-light-text-primary dark:text-dark-text-primary">SCC1 Network Setting</h2>
+    <form class="space-y-4">
+      <div class="space-y-2">
+        <label class="block text-sm text-light-text-secondary dark:text-dark-text-secondary">IP Address</label>
+        <input type="text" class="w-full p-2 border rounded-md border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover">
+      </div>
+      <div class="space-y-2">
+        <label class="block text-sm text-light-text-secondary dark:text-dark-text-secondary">Modbus Address</label>
+        <input type="text" class="w-full p-2 border rounded-md border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover">
+      </div>
+      <div class="flex justify-end space-x-2">
+        <button type="submit" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">Save</button>
+        <button type="button" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Refresh</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
+    <h2 class="text-lg font-medium mb-4 text-light-text-primary dark:text-dark-text-primary">SCC2 Network Setting</h2>
+    <form class="space-y-4">
+      <div class="space-y-2">
+        <label class="block text-sm text-light-text-secondary dark:text-dark-text-secondary">IP Address</label>
+        <input type="text" class="w-full p-2 border rounded-md border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover">
+      </div>
+      <div class="space-y-2">
+        <label class="block text-sm text-light-text-secondary dark:text-dark-text-secondary">Modbus Address</label>
+        <input type="text" class="w-full p-2 border rounded-md border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover">
+      </div>
+      <div class="flex justify-end space-x-2">
+        <button type="submit" class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">Save</button>
+        <button type="button" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Refresh</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Alarm Threshold -->
+  <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
+    <h2 class="text-lg font-medium mb-4 text-light-text-primary dark:text-dark-text-primary">Alarm Threshold</h2>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr class="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+            <th class="p-2 text-left">Alarm Name</th>
+            <th class="p-2 text-left">Threshold</th>
+            <th class="p-2 text-left">Time Threshold</th>
+            <th class="p-2 text-left">Overvoltage</th>
+            <th class="p-2 text-left">Set</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="p-2">Bus Voltage</td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Set</button></td>
+          </tr>
+          <tr>
+            <td class="p-2">Battery Voltage</td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><input type="text" class="w-full p-1 border rounded border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover"></td>
+            <td><button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">Set</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
+    <h2 class="text-lg font-medium mb-4 text-light-text-primary dark:text-dark-text-primary">Site Location</h2>
+    <form class="space-y-4">
+      <div class="space-y-2">
+        <label class="block text-sm text-light-text-secondary dark:text-dark-text-secondary">Username</label>
+        <input type="text" class="w-full p-2 border rounded-md border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover">
+      </div>
+      <div class="space-y-2">
+        <label class="block text-sm text-light-text-secondary dark:text-dark-text-secondary">Level</label>
+        <input type="text" class="w-full p-2 border rounded-md border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover">
+      </div>
+      <div class="space-y-2">
+        <label class="block text-sm text-light-text-secondary dark:text-dark-text-secondary">Password</label>
+        <input type="text" class="w-full p-2 border rounded-md border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover">
+      </div>
+      <div class="space-y-2">
+        <label class="block text-sm text-light-text-secondary dark:text-dark-text-secondary">Confirm Password</label>
+        <input type="text" class="w-full p-2 border rounded-md border-light-border dark:border-dark-border bg-light-secondary dark:bg-dark-hover">
+      </div>
+      <div class="flex justify-end">
+        <button type="button" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Refresh</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
