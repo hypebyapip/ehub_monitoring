@@ -34,57 +34,118 @@
   </div>
   
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-    <!-- SCC Cards - Only show active SCCs -->
-    {% for scc in scc_list %}
-    {% if scc.is_active %}
+    <!-- SCC 1 Card -->
     <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-4">
-      <div id="scc{{ scc.scc_number }}-status" class="h-1 w-full rounded-t-lg mb-2" style="background-color: #dc3545;"></div>
+      <div id="scc1-status" class="h-1 w-full rounded-t-lg mb-2" style="background-color: #28a745;"></div>
       <div class="bg-gray-100 dark:bg-dark-hover rounded-t-lg border-b border-light-border dark:border-dark-border p-1">
         <div class="flex items-center gap-2 p-2 justify-center">
           <h2 class="font-medium text-light-text-primary dark:text-dark-text-primary">
-            <i class="fa-solid fa-solar-panel mr-2"></i>Solar Charge Controller {{ scc.scc_number }}
+            <i class="fa-solid fa-solar-panel mr-2"></i>Solar Charge Controller 1
           </h2>
         </div>
       </div>
-      
-      <!-- PV Metrics -->
       <div class="grid grid-cols-3 border border-light-border dark:border-dark-border text-center p-4">
         <div>
           <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">PV Voltage</p>
-          <p id="pv{{ scc.scc_number }}-voltage" class="text-lg font-bold">0.00 V</p>
+          <p id="pv1-voltage" class="text-lg font-bold">0.00 V</p>
         </div>
         <div>
           <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">PV Current</p>
-          <p id="pv{{ scc.scc_number }}-current" class="text-lg font-bold">0.00 A</p>
+          <p id="pv1-current" class="text-lg font-bold">0.00 A</p>
         </div>
         <div>
           <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">PV Power</p>
-          <p id="pv{{ scc.scc_number }}-power" class="text-lg font-bold">0.00 W</p>
+          <p id="pv1-power" class="text-lg font-bold">0.00 W</p>
         </div>
       </div>
-      
-      <!-- SCC Metrics -->
       <div class="grid grid-cols-4 border border-light-border dark:border-dark-border text-center p-4">
         <div>
           <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">SCC Voltage</p>
-          <p id="scc{{ scc.scc_number }}-voltage" class="text-lg font-bold">0.00 V</p>
+          <p id="scc1-voltage" class="text-lg font-bold">0.00 V</p>
         </div>
         <div>
           <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">SCC Current</p>
-          <p id="scc{{ scc.scc_number }}-current" class="text-lg font-bold">0.00 A</p>
+          <p id="scc1-current" class="text-lg font-bold">0.00 A</p>
         </div>
         <div>
           <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">SCC Power</p>
-          <p id="scc{{ scc.scc_number }}-power" class="text-lg font-bold">0.00 W</p>
+          <p id="scc1-power" class="text-lg font-bold">0.00 W</p>
         </div>
         <div>
           <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">SCC Temp</p>
-          <p id="scc{{ scc.scc_number }}-temp" class="text-lg font-bold">0.00 °C</p>
+          <p id="scc1-temp" class="text-lg font-bold">0.00 °C</p>
         </div>
       </div>
     </div>
-    {% endif %}
-    {% endfor %}
+    
+    <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-4">
+      <div id="scc2-status" class="h-1 w-full rounded-t-lg mb-2" style="background-color: #dc3545;"></div>
+      <div class="bg-gray-100 dark:bg-dark-hover rounded-t-lg border-b border-light-border dark:border-dark-border p-1">
+        <div class="flex items-center gap-2 p-2 justify-center">
+          <h2 class="font-medium text-light-text-primary dark:text-dark-text-primary">
+            <i class="fa-solid fa-solar-panel mr-2"></i>Solar Charge Controller 2
+          </h2>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 border border-light-border dark:border-dark-border text-center p-4">
+        <div>
+          <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">PV Voltage</p>
+          <p id="pv2-voltage" class="text-lg font-bold">0.00 V</p>
+        </div>
+        <div>
+          <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">PV Current</p>
+          <p id="pv2-current" class="text-lg font-bold">0.00 A</p>
+        </div>
+        <div>
+          <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">PV Power</p>
+          <p id="pv2-power" class="text-lg font-bold">0.00 W</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-4 border border-light-border dark:border-dark-border text-center p-4">
+        <div>
+          <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">SCC Voltage</p>
+          <p id="scc2-voltage" class="text-lg font-bold">0.00 V</p>
+        </div>
+        <div>
+          <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">SCC Current</p>
+          <p id="scc2-current" class="text-lg font-bold">0.00 A</p>
+        </div>
+        <div>
+          <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">SCC Power</p>
+          <p id="scc2-power" class="text-lg font-bold">0.00 W</p>
+        </div>
+        <div>
+          <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">SCC Temp</p>
+          <p id="scc2-temp" class="text-lg font-bold">0.00 °C</p>
+        </div>
+      </div>
+    </div>
+    
+    
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        function updateSCC2Display(voltage, current, power, temp) {
+          let statusDiv = document.getElementById("scc2-status");
+          
+          if (!statusDiv) return; // Cegah error jika elemen tidak ditemukan
+          
+          if (voltage > 10 && current > 1 && power > 10 && temp < 50) {
+            statusDiv.style.backgroundColor = "#28a745"; // Hijau
+          } else {
+            statusDiv.style.backgroundColor = "#dc3545"; // Merah
+          }
+        }
+    
+        // Panggil fungsi pertama kali dengan nilai awal
+        updateSCC2Display(5.0, 0.5, 5.0, 55.0); // Harus merah
+    
+        // Simulasi pembaruan data (gantilah ini dengan data nyata dari API)
+        setTimeout(() => {
+          updateSCC2Display(12.5, 2.0, 30.0, 35.0); // Harus hijau
+        }, 10000); // Setelah 3 detik
+      });
+    </script>
+    
+    
   </div>
-</div>
 {% endblock %}

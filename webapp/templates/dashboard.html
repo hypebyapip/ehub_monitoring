@@ -97,47 +97,56 @@
     </div>
   </div>
 
-  <!-- Disk Usage -->
-  <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
-    <h2 class="text-lg font-medium mb-4 text-center bg-gray-100 dark:bg-dark-hover rounded-t-lg border-b border-light-border dark:border-dark-border p-1">
-      Disk Used
-    </h2>
-    <div class="flex items-center justify-center space-x-6">
-      <!-- Pie Chart -->
-      <div class="relative w-24 h-24">
-        <canvas id="diskChart" class="w-full h-full"></canvas>
-        <div class="absolute inset-0 flex items-center justify-center text-lg font-bold text-gray-600">65%</div>
-      </div>
-      <!-- Disk Info -->
-      <div class="grid grid-cols-3 gap-4 text-center">
-        <div class="border border-gray-300 dark:border-gray-600 p-4 rounded-lg">
-          <p class="text-sm text-gray-500">TOTAL DISK</p>
-          <p class="text-lg font-bold">15.7 GB</p>
-        </div>
-        <div class="border border-gray-300 dark:border-gray-600 p-4 rounded-lg">
-          <p class="text-sm text-gray-500">USED</p>
-          <p class="text-lg font-bold text-green-500">10.2 GB</p>
-        </div>
-        <div class="border border-gray-300 dark:border-gray-600 p-4 rounded-lg">
-          <p class="text-sm text-gray-500">FREE</p>
-          <p class="text-lg font-bold ">4.80 GB</p>
-        </div>
-      </div>
+ <!-- Disk Usage -->
+<div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
+  <h2 class="text-lg font-medium mb-4 text-center bg-gray-100 dark:bg-dark-hover rounded-t-lg border-b border-light-border dark:border-dark-border p-1">
+    Disk Used
+  </h2>
+  <div class="flex items-center justify-center space-x-6">
+    <!-- Pie Chart with Progress Circle -->
+    <div class="relative w-24 h-24 flex items-center justify-center">
+      <svg class="absolute w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+        <!-- Background Circle (Hijau - 100%) -->
+        <circle cx="50" cy="50" r="45" fill="none" stroke="green" stroke-width="10" />
+        <!-- Blue Progress Circle (65%) -->
+        <circle cx="50" cy="50" r="45" fill="none" stroke="blue" stroke-width="10"
+          stroke-dasharray="282.6" stroke-dashoffset="98.9" stroke-linecap="round" />
+      </svg>
+      <div class="absolute text-lg font-bold text-gray-600">65%</div>
     </div>
-
-    <!-- Penjelasan Warna -->
-    <div class="flex justify-center items-center mt-4 space-x-4">
-      <div class="flex items-center space-x-2">
-        <div class="w-4 h-4 bg-blue-500 rounded-full"></div>
-        <span class="text-sm text-gray-600">Used</span>
+    <!-- Disk Info -->
+    <div class="grid grid-cols-3 gap-4 text-center">
+      <div class="border border-gray-300 dark:border-gray-600 p-4 rounded-lg">
+        <p class="text-sm text-gray-500">TOTAL DISK</p>
+        <p class="text-lg font-bold">15.7 GB</p>
       </div>
-      <div class="flex items-center space-x-2">
-        <div class="w-4 h-4 bg-green-500 rounded-full"></div>
-        <span class="text-sm text-gray-600">Free</span>
+      <div class="border border-gray-300 dark:border-gray-600 p-4 rounded-lg">
+        <p class="text-sm text-gray-500">USED</p>
+        <p class="text-lg font-bold text-green-500">10.2 GB</p>
+      </div>
+      <div class="border border-gray-300 dark:border-gray-600 p-4 rounded-lg">
+        <p class="text-sm text-gray-500">FREE</p>
+        <p class="text-lg font-bold">4.80 GB</p>
       </div>
     </div>
   </div>
+  <!-- Penjelasan Warna -->
+  <div class="flex justify-center items-center mt-4 space-x-4">
+    <div class="flex items-center space-x-2">
+      <div class="w-4 h-4 bg-blue-500 rounded-full"></div>
+      <span class="text-sm text-gray-600">Used</span>
+    </div>
+    <div class="flex items-center space-x-2">
+      <div class="w-4 h-4 bg-green-500 rounded-full"></div>
+      <span class="text-sm text-gray-600">Free</span>
+    </div>
+  </div>
 </div>
+</div>
+
+
+
+    
 
 <script>
   // Simulasi nilai sinyal (bisa diubah sesuai data yang diterima)

@@ -3,52 +3,53 @@
 {% block content %}
 
 <div class="container mx-auto p-6">
-    <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-6">
-        <h2 class="text-center bg-gray-100 dark:bg-dark-hover rounded-lg p-3 gap-2 font-medium mb-4 text-light-text-primary dark:text-dark-text-primary">
+    <div class="bg-white dark:bg-dark-secondary rounded-lg shadow p-6 max-w-lg mx-auto">
+        <!-- Header dengan lebar sama seperti input -->
+        <h2 class="text-center bg-gray-100 dark:bg-dark-hover rounded-t-lg p-3 font-medium text-light-text-primary dark:text-dark-text-primary border-b border-light-border dark:border-dark-border w-full">
             Device Info Settings
         </h2>
 
-        <form id="deviceForm" class="bg-white dark:bg-dark-secondary rounded-lg shadow p-4 mt-6 relative max-w-lg mx-auto">
+        <form id="deviceForm" class="bg-white dark:bg-dark-secondary rounded-b-lg shadow p-4 relative">
             <div class="mb-4">
                 <label class="block text-sm font-medium">Device Model</label>
                 <input type="text" id="deviceModel" name="device_model" 
-                       class="w-full p-2 border rounded bg-white bg-light-secondary dark:bg-dark-hover border-b border-light-border dark:border-dark-border"
+                       class="w-full p-2 border rounded bg-white dark:bg-dark-hover border-b border-light-border dark:border-dark-border"
                        value="{{ device.device_model if device else '' }}"
                        required>
             </div>
-            
+
             <div class="mb-4">
                 <label class="block text-sm font-medium">Part Number</label>
                 <input type="text" id="partNumber" name="part_number"
-                       class="w-full p-2 border rounded bg-white bg-light-secondary dark:bg-dark-hover border-b border-light-border dark:border-dark-border"
+                       class="w-full p-2 border rounded bg-white dark:bg-dark-hover border-b border-light-border dark:border-dark-border"
                        value="{{ device.part_number if device else '' }}"
                        required>
             </div>
-            
+
             <div class="mb-4">
                 <label class="block text-sm font-medium">Serial Number</label>
                 <input type="text" id="serialNumber" name="serial_number"
-                       class="w-full p-2 border rounded bg-white bg-light-secondary dark:bg-dark-hover border-b border-light-border dark:border-dark-border"
+                       class="w-full p-2 border rounded bg-white dark:bg-dark-hover border-b border-light-border dark:border-dark-border"
                        value="{{ device.serial_number if device else '' }}"
                        required>
             </div>
-            
+
             <div class="mb-4">
                 <label class="block text-sm font-medium">Software Version</label>
                 <input type="text" id="softwareVer" name="software_ver"
-                       class="w-full p-2 border rounded bg-white bg-light-secondary dark:bg-dark-hover border-b border-light-border dark:border-dark-border"
+                       class="w-full p-2 border rounded bg-white dark:bg-dark-hover border-b border-light-border dark:border-dark-border"
                        value="{{ device.software_ver if device else '' }}"
                        required>
             </div>
-            
+
             <div class="mb-4">
                 <label class="block text-sm font-medium">Hardware Version</label>
                 <input type="text" id="hardwareVer" name="hardware_ver"
-                       class="w-full p-2 border rounded bg-white bg-light-secondary dark:bg-dark-hover border-b border-light-border dark:border-dark-border"
+                       class="w-full p-2 border rounded bg-white dark:bg-dark-hover border-b border-light-border dark:border-dark-border"
                        value="{{ device.hardware_ver if device else '' }}"
                        required>
             </div>
-            
+
             <div class="flex justify-end">
                 <button type="submit" id="saveButton" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Save</button>
             </div>
@@ -56,33 +57,5 @@
     </div>
 </div>
 
-<script>
-document.getElementById('deviceForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    saveDevice();
-});
-
-function saveDevice() {
-    const formData = new FormData(document.getElementById('deviceForm'));
-    
-    fetch('{{ url_for("settings.save_device") }}', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert(data.message);
-            location.reload();
-        } else {
-            alert('Error: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Failed to save device settings');
-    });
-}
-</script>
 
 {% endblock %}

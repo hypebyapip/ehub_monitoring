@@ -9,6 +9,10 @@ def get_db_session():
     return current_app.db_session
 
 @monitoring_bp.route('/')
+def login():
+    return render_template('login.html')
+
+@monitoring_bp.route('/dashboard')
 def dashboard():
     return render_template('dashboard.html')
 
